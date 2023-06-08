@@ -1,0 +1,92 @@
+---
+bibliography: rodrigues_wright_versioning.bib
+format: 
+  pdf:
+    number-sections: true
+geometry: margin = 1.0in
+font-size: 11pt
+mainfont: cochineal
+sansfont: Helvetica
+header-includes:
+  \usepackage{booktabs}
+  \usepackage{setspace}
+  \doublespacing
+  \usepackage[left]{lineno}
+  \linenumbers
+---
+
+\date{\today}
+\title{\textbf{Replication materials are great but software versioning still poses a problem for open science}}
+\author{Bruno Rodrigues \thanks{Ministry of Higher Education and Research, Luxembourg} \and Taylor J. Wright\thanks{Brock University, \href{mailto:twright3@brocku.ca}{twright3@brocku.ca}}
+}
+
+```{r, echo=FALSE, include=FALSE}
+library(knitr)
+```
+
+\maketitle
+
+\newpage
+
+## Introduction (Currently submitted proposal)
+- Introduction will expand on this opening paragraph
+
+Concerns about the reproducibility and replicability of social science research has prompted a push for journals to require the publication of research materials that accompany academic research (see, for example, the 2014 Joint Editors Transparency Statement which was signed by editors of 27 leading political science journals: \url{https://www.dartstatement.org/2014-journal-editors-statement-jets}). Specifically, the provision of underlying data and scripts used for data preparation and analysis. However, even if these materials are provided (and even when in place these policies do not have perfect compliance (@philip2010report, @stockemer2018data)), the regular software updates and new version releases can result in the replication materials failing to faithfully reproduce the authors' results or even run at all (@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R} changes that could break scripts).
+
+I propose presenting a case study—an article published in Journal of Politics in January 2022 titled, ``Multiracial Identity and Political Preferences'', @davenport2022multiracial, that details that replication challenges arising from changes in the statistical software \texttt{R}. I was unable to reproduce the authors' results using either the current version of \texttt{R}, or the version that the authors indicate they used. The lack of reproducibility arose due to a change in the defaults used by base \texttt{R} when generating random numbers starting in version 3.6.0.
+
+The proposed article would close with a discussion of currently available tools and best practices (e.g. Docker and \texttt{R} packages such as \texttt{renv}, \texttt{groundhog}) for ensuring that replication materials continue to faithfully reproduce the results, despite post-publication changes in the tools used by the authors.
+
+\newpage
+
+## Reproduction
+
+A key thing here is that I don't think we want to be too hostile sounding towards these authors, they had readme files and reproducibility materials available. It's just that manual entry human-error hobgoblins got them with the R versioning.
+
+- Brief discussion of authors' paper and context
+- The results of their code using stated software version in documentation (just screenshot right now)
+```{r fig1screenshot, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure1_screenshot.png", error = FALSE)
+```
+
+```{r fig2screenshot, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure2_screenshot.png", error = FALSE)
+```
+- The results of their code using later software version (post 3.6.0)
+
+```{r fig1post, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure1_postchange.png", error = FALSE)
+```
+
+```{r fig2post, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure2_postchange.png", error = FALSE)
+```
+- Results of their code using earlier software version (pre 3.6.0)
+```{r fig1pre, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure1_prechange.png", error = FALSE)
+```
+
+```{r fig2pre, echo=FALSE, out.width = '100%'}
+# need to tweak axes to match authors, CI cap is truncated
+knitr::include_graphics("./figures/figure2_prechange.png", error = FALSE)
+```
+
+The authors note that they use R version 3.6.2. Issue seems to be the weights the authors use are non-integer and Zelig uses sample() in that case which following changes to base R yields different results in 3.6.x and 3.5.x (see http://docs.zeligproject.org/articles/weights.html). Prior to R 3.6.x RNGkind(sample.kind = "Rounding") was the default behaviour but after 3.6.0 the sample function's new default behaviour is RNGkind(sample.kind = "Rejection") (see https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html). 
+
+Soemthing about how there are ways to ensure that the estimates are consistent (changing the weights to integers or setting the RNGkind to be backwards compatible) but documenting the correct version of R used in the analysis is probably the easiest way. Segue into...
+
+\newpage
+
+## Discussion
+
+- What options in R? 
+- In Stata? 
+- Containerized? 
+
+\newpage
+
+## Conclusion
+
+\newpage
+
+## References
