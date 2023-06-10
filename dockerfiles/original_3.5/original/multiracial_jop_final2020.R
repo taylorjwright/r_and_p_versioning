@@ -67,7 +67,7 @@ library("stringr")
 
 
 
-setwd('~/Dropbox/PewMultiracial/analysis/')
+#setwd('~/Dropbox/PewMultiracial/analysis/')
 source("multiracial_jop_functions_robust.R")
 
 

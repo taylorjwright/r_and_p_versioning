@@ -1,9 +1,18 @@
-FROM rocker/r-ver:3.5
+FROM rhub/rig:latest
+
+RUN rig install 3.5.0
+
+RUN rig default 3.5.0
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libcurl4-openssl-dev 
+
 
 # Repos are set to a fixed MRAN snapshot (see:
 # https://github.com/rocker-org/rocker-versioned/blob/1920e7cfc757bad02d041a0bddec1a18b1ebc4c1/r-ver/3.5.0.Dockerfile#L113)
 # so set repos to latest to get {groundhog}
-RUN echo "options(repos = c(CRAN='https://packagemanager.rstudio.com/cran/latest'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
+#RUN echo "options(repos = c(CRAN='https://packagemanager.rstudio.com/cran/latest'), download.file.method = 'libcurl')" >> /usr/local/lib/R/etc/Rprofile.site
 
 # Create required folders
 # This folder will hold the entire library

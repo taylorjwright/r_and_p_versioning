@@ -11,7 +11,7 @@
 #                 lib = groundhog_lib)
 
 # the paper was published in may 2020, so set the date accordingly below
-# However, R version 3.5.2 was not the current version at the time, so we need
+# However, R version 3.5.0 was not the current version at the time, so we need
 # to set `tolerate.R.version`
 groundhog::groundhog.library("
     library(MASS)
@@ -36,5 +36,5 @@ groundhog::groundhog.library("
     library(reporttools)
     library(stringr)",
     "2020-05-15",
-    tolerate.R.version='3.5.2'
+    tolerate.R.version='3.5.0'
     )
