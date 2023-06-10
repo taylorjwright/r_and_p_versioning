@@ -19,7 +19,7 @@ RUN apt-get update \
 RUN mkdir -p /root/R_groundhog
 #
 ## Install groundhog
-RUN R -e "install.packages('groundhog');groundhog::set.groundhog.folder('/root/R_groundhog')"
+RUN R -e "install.packages(c('remotes', 'groundhog'));groundhog::set.groundhog.folder('/root/R_groundhog')"
 #
 ## Copy the required files
 COPY original /home/r_and_p/original

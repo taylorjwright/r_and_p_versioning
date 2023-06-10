@@ -11,8 +11,20 @@
 #                 lib = groundhog_lib)
 
 # the paper was published in may 2020, so set the date accordingly below
+# Also, the package library used was likely older than may 2020: this is because
+# in may 2020 {foreign} was on version 0.8-79, but that version already required
+# R version 4.0, and so cannot be installed on R 3.5.0.
 # However, R version 3.5.0 was not the current version at the time, so we need
 # to set `tolerate.R.version`
+
+# For some reason, the version of matching as of 2019-12-15 has not been archived?
+# It should be version 'Matching_4.9-6', but it's nowhere to be found
+# So groundhog cannot install it.
+# Let's try install to install the right version from github
+remotes::install_github("JasjeetSekhon/Matching",
+                        ref = "529d1ad", # commit with version 4.9-6
+                        lib = "root/R_groundhog")
+
 groundhog::groundhog.library("
     library(MASS)
     library(dplyr)
@@ -35,6 +47,6 @@ groundhog::groundhog.library("
     library(ggridges)
     library(reporttools)
     library(stringr)",
-    "2020-05-15",
+    "2019-12-15",
     tolerate.R.version='3.5.0'
     )
