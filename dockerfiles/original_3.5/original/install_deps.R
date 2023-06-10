@@ -17,36 +17,57 @@
 # However, R version 3.5.0 was not the current version at the time, so we need
 # to set `tolerate.R.version`
 
-# For some reason, the version of matching as of 2019-12-15 has not been archived?
+# Update: not using groundhog, because:
+# for some reason, the version of matching as of 2019-12-15 has not been archived?
 # It should be version 'Matching_4.9-6', but it's nowhere to be found
-# So groundhog cannot install it.
+# So groundhog cannot install it. I've tried from Github:
 # Let's try install to install the right version from github
-remotes::install_github("JasjeetSekhon/Matching",
-                        ref = "529d1ad", # commit with version 4.9-6
-                        lib = "root/R_groundhog")
+#install.packages("remotes")
+#
+#remotes::install_github("JasjeetSekhon/Matching",
+#                        ref = "529d1ad", # commit with version 4.9-6
+#                        )
+# but then had an issue with the library not being writeable
+# The solution I've settled on is using Posit's CRAN snapshots. First, I tried December 
+# 2019, but the version of MCMCpack that was available at the time required R 3.6.
+# So now, I've settled to May 2019, and now the dependencies get installed.
 
-groundhog::groundhog.library("
-    library(MASS)
-    library(dplyr)
-    library(tidyr)
-    library(ggplot2)
-    library(purrr)
-    library(broom)
-    library(foreign)
-    library(Zelig)
-    library(ZeligChoice)
-    library(nnet)
-    library(car)
-    library(texreg)
-    library(extrafont)
-    library(caret)
-    library(e1071)
-    library(scales)
-    library(xtable)
-    library(questionr)
-    library(ggridges)
-    library(reporttools)
-    library(stringr)",
-    "2019-12-15",
-    tolerate.R.version='3.5.0'
-    )
+# I don't think the below is needed
+#install.packages(
+#  c("sandwich",
+#    "VGAM",
+#    "jsonlite",
+#    "AER",
+#    "plyr",
+#    "dplyr",
+#    "quantreg",
+#    "geepack",
+#    "MCMCpack",
+#    "maxLik",
+#    "Amelia",
+#    "MatchIt",
+#    "survey"))
+
+install.packages(
+  c("MASS",
+    "dplyr",
+    "tidyr",
+    "ggplot2",
+    "purrr",
+    "broom",
+    "foreign",
+    "Zelig",
+    "ZeligChoice",
+    "nnet",
+    "car",
+    "texreg",
+    "extrafont",
+    "caret",
+    "e1071",
+    "scales",
+    "xtable",
+    "questionr",
+    "ggridges",
+    "reporttools",
+    "stringr")
+)
