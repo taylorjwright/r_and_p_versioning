@@ -1,14 +1,15 @@
 FROM rhub/rig:latest
 
-RUN rig install 3.6.0
+RUN rig install 4.2.0
 
-RUN rig default 3.6.0
+RUN rig default 4.2.0
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    libcurl4-openssl-dev 
+    libcurl4-openssl-dev \
+    libicu-dev pkg-config # for stringi on R 4.2.0
 
-RUN echo 'options(repos = c(REPO_NAME = "https://packagemanager.rstudio.com/cran/__linux__/jammy/2019-05-16"))' >> /root/.Rprofile
+RUN echo 'options(repos = c(REPO_NAME = "https://packagemanager.rstudio.com/cran/__linux__/jammy/2023-05-16"))' >> /root/.Rprofile
 
 COPY original /home/r_and_p/original
 
