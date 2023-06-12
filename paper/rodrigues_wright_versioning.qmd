@@ -41,6 +41,7 @@ The proposed article would close with a discussion of currently available tools 
 
 ## Reproduction
 
+### Illustrating the issue with software versioning 
 A key thing here is that I don't think we want to be too hostile sounding towards these authors, they had readme files and reproducibility materials available. It's just that manual entry human-error hobgoblins got them with the R versioning.
 
 - Brief discussion of authors' paper and context
@@ -79,9 +80,10 @@ Soemthing about how there are ways to ensure that the estimates are consistent (
 
 ## Discussion
 
-- What options in R? 
-- In Stata? 
-- Containerized? 
+### Using Docker {groundhog} to ensure reproducibility 
+
+### Reproducibility isn't just version and package management — using {targets} to improve readibility and reproducibility
+
 
 \newpage
 
