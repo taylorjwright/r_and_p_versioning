@@ -20,7 +20,10 @@
 #install.packages(packageurl2, repos=NULL, type="source")
 
 
+# reproducibility paper
+# get r version
 
+r_version <- gsub("\\.", "_", make.names(sessionInfo()$R.version$version.string))
 
 library("MASS")
 
@@ -498,7 +501,7 @@ ggplot(police, aes(y = mean, x = race)) +
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank()) +
   ylab("Difference from Monoracial Whites") + xlab("")
-ggsave("multiracial_jop/police.pdf", width = 6, height = 2.5)
+#ggsave("multiracial_jop/police.pdf", width = 6, height = 2.5)
 
 
 
@@ -574,7 +577,7 @@ ggplot(cultural, aes(y = mean, x = race)) +
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank()) +
   ylab("Difference from Monoracial Whites") + xlab("")
-ggsave("multiracial_jop/cultural.pdf", width = 6, height = 2.5)
+#ggsave("multiracial_jop/cultural.pdf", width = 6, height = 2.5)
 
 
 
@@ -651,7 +654,7 @@ ggplot(welfare, aes(y = mean, x = race)) +
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank()) +
   ylab("Difference from Monoracial Whites") + xlab("")
-ggsave("multiracial_jop/welfare.pdf", width = 6, height = 2.5)
+#ggsave("multiracial_jop/welfare.pdf", width = 6, height = 2.5)#
 
 
 
@@ -719,7 +722,11 @@ m2m$model <- factor(
 )
 
 
-ggplot(m2m, aes(y = mean, x = model)) +
+# Replication: save the model, not the data itself
+
+saveRDS(m2m, paste0("outputs/m2m_", r_version,".rds"))
+
+ggplot_m2m <- ggplot(m2m, aes(y = mean, x = model)) +
   geom_errorbar(width = .3, aes(ymin = lower95, ymax = upper95)) +
   geom_linerange(size = 1.2, aes(ymin = lower90, ymax = upper90)) +
   geom_point(size = 2.5) + theme_bw() + coord_flip() +
@@ -731,7 +738,10 @@ ggplot(m2m, aes(y = mean, x = model)) +
         panel.grid.minor.x = element_blank()) +
   facet_wrap(~ race) +
   ylab("Difference from Monoracial Minority Group") + xlab("")
-ggsave("multiracial_jop/m2m.pdf", width = 7, height = 2.5)
+
+
+# commented this line because it's not needed for replication
+#ggsave("multiracial_jop/m2m.pdf", width = 7, height = 2.5)
 
 
 
@@ -800,9 +810,10 @@ m2w$model <- factor(
   levels = c('Police\nPerceptions', 'Social\nWelfare', 'Cultural\nLiberalism')
 )
 
+# replication: save the model, not the plot
+saveRDS(m2w, paste0("outputs/m2w_", r_version,".rds"))
 
-
-ggplot(m2w, aes(y = mean, x = model)) +
+ggplot_m2w <- ggplot(m2w, aes(y = mean, x = model)) +
   geom_errorbar(width = .3, aes(ymin = lower95, ymax = upper95)) +
   geom_linerange(size = 1.2, aes(ymin = lower90, ymax = upper90)) +
   geom_point(size = 2.5) + theme_bw() + coord_flip() +
@@ -814,7 +825,9 @@ ggplot(m2w, aes(y = mean, x = model)) +
         panel.grid.minor.x = element_blank()) +
   facet_wrap(~ race) +
   ylab("Difference from Monoracial Whites") + xlab("")
-ggsave("multiracial_jop/m2w.pdf", width = 7, height = 2.5)
+
+
+#ggsave("multiracial_jop/m2w.pdf", width = 7, height = 2.5)
 
 
 ##################
@@ -845,155 +858,156 @@ weights::wtd.chi.sq(df$police, df$race, weight = df$psweight, na.rm = TRUE)
 
 
 
+# Reproducibility: need to comment this for now
 
 ## REGRESSION TABLES
 
 
 ## Pooled sample
 ## TABLE A-2
-oLogitTable(
-  modelCultural$zelig.out$z.out[[1]],
-  names = c("More Liberal"),
-  caption = "Cultural Preferences Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are multinomial logistic regression estimates with 95 percent confidence intervals.",
-  tablenum = 2,
-  filename = "multiracial_jop/cultural"
-)
-
-
-## TABLE A-3
-oLogitTable(
-  modelWelfare$zelig.out$z.out[[1]],
-  names = c("More Liberal"),
-  caption = "Social Welfare Preferences Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are ordered logistic regression estimates with 95 percent confidence intervals.",
-  tablenum = 3,
-  filename = "multiracial_jop/welfare"
-)
-
-
-## TABLE A-4
-oLogitTable(
-  modelPolice$zelig.out$z.out[[1]],
-  filename = "multiracial_jop/police",
-  names = c("More Negative"),
-  caption = "Perceptions of Police Treatment of Minorities Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are ordered logistic regression estimates with 95 percent confidence intervals.",
-  tablenum = 4
-)
-
-
-## By subgroup
-## TABLE A-5
-modelCulturalByRace <- df %>%
-  nest(-race) %>%
-  mutate(
-    model = map(data, ~ polr(
-      as.factor(cultural) ~ age + educ3 + gender + income + south +
-        relLinked + relRace + relClose + salRelig,
-      data = .,
-      weights = psweight,
-      method = "logistic",
-      model = FALSE,
-      Hess = TRUE
-    ))
-  ) %>%
-  dplyr::select(race, model)
-
-
-oLogitTableByRace(
-  modelCulturalByRace$model,
-  filename = "multiracial_jop/cultural_byrace",
-  names = as.vector(modelCulturalByRace$race),
-  caption = "Cultural Preferences Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are multinomial logistic regression estimates with 95 percent confidence intervals.",
-  tablenum = 5
-)
-
-## TABLE A-6
-modelWelfareByRace <- df %>%
-  nest(-race) %>%
-  mutate(
-    model = map(data, ~ polr(
-      as.factor(welfare) ~ age + educ3 + gender + income + south +
-        relLinked + relRace + relClose + salRelig,
-      data = .,
-      weights = psweight,
-      method = "logistic",
-      model = FALSE,
-      Hess = TRUE
-    ))
-  ) %>%
-  dplyr::select(race, model)
-
-
-
-oLogitTableByRace(
-  modelWelfareByRace$model,
-  filename = "multiracial_jop/welfare_byrace",
-  names = as.vector(modelWelfareByRace$race),
-  caption = "Social Welfare Preferences Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are ordered logistic regression estimates with 95 percent confidence intervals.",
-  tablenum = 6
-)
-
-## TABLE A-7
-modelPoliceByRace <- df %>%
-  nest(-race) %>%
-  mutate(
-    model = map(data, ~ polr(
-    as.factor(police) ~ age + educ3 + gender + income + south +
-      relLinked + relRace + relClose + salRelig,
-    data = .,
-    weights = psweight,
-    method = "logistic",
-    model = FALSE,
-    Hess = TRUE
-  ))
-  ) %>%
-  dplyr::select(race, model)
-
-
-oLogitTableByRace(
-  modelPoliceByRace$model,
-  filename = "multiracial_jop/police_byrace",
-  names = as.vector(modelPoliceByRace$race),
-  caption = "Perceptions of Police Treatment of Minorities Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are ordered logistic regression estimates with 95 percent confidence intervals.",
-  tablenum = 7
-)
-
-
-
-
-## DESCRIPTIVES
-
-##TABLE A-8
-reporttools::tableContinuous(
-  vars = continuous,
-  group = group,
-  stats = c("n", "min", "q1", "median", "mean", "q3", "max", "s", "iqr"),
-  cap = "Demographic Characteristics by Racial Group (Continuous Variables)",
-  lab = "tab:age",
-  longtable = FALSE,
-  file = "multiracial_jop/cont.tex"
-  )
-
-
-## TABLE A-9
-# gender, age, education, income, region
-factors <- data.frame(
-  "Gender" = df$gender,
-  "Education" = df$educ3,
-  "Income" = str_replace_all(as.character(df$faminc), '\\$', '\\\\$'),
-  "South" = ifelse(df$south == 1, 'South', 'Non-South')
-)
-
-group <- df$race
-continuous <- data.frame("Age" = df$age)
-
-reporttools::tableNominal(
-  vars = factors,
-  group = group,
-  vertical = TRUE,
-  cap = "Demographic Characteristics by Racial Group (Nominal Variables)",
-  lab = "tab:nominal",
-  longtable = TRUE,
-  cumsum = FALSE,
-  file = "multiracial_jop/nominal.tex",
-  rotate.colnames = TRUE
-)
+#oLogitTable(
+#  modelCultural$zelig.out$z.out[[1]],
+#  names = c("More Liberal"),
+#  caption = "Cultural Preferences Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are multinomial logistic regression estimates with 95 percent confidence intervals.",
+#  tablenum = 2,
+#  filename = "multiracial_jop/cultural"
+#)
+#
+#
+### TABLE A-3
+#oLogitTable(
+#  modelWelfare$zelig.out$z.out[[1]],
+#  names = c("More Liberal"),
+#  caption = "Social Welfare Preferences Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are ordered logistic regression estimates with 95 percent confidence intervals.",
+#  tablenum = 3,
+#  filename = "multiracial_jop/welfare"
+#)
+#
+#
+### TABLE A-4
+#oLogitTable(
+#  modelPolice$zelig.out$z.out[[1]],
+#  filename = "multiracial_jop/police",
+#  names = c("More Negative"),
+#  caption = "Perceptions of Police Treatment of Minorities Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are ordered logistic regression estimates with 95 percent confidence intervals.",
+#  tablenum = 4
+#)
+#
+#
+### By subgroup
+### TABLE A-5
+#modelCulturalByRace <- df %>%
+#  nest(-race) %>%
+#  mutate(
+#    model = map(data, ~ polr(
+#      as.factor(cultural) ~ age + educ3 + gender + income + south +
+#        relLinked + relRace + relClose + salRelig,
+#      data = .,
+#      weights = psweight,
+#      method = "logistic",
+#      model = FALSE,
+#      Hess = TRUE
+#    ))
+#  ) %>%
+#  dplyr::select(race, model)
+#
+#
+#oLogitTableByRace(
+#  modelCulturalByRace$model,
+#  filename = "multiracial_jop/cultural_byrace",
+#  names = as.vector(modelCulturalByRace$race),
+#  caption = "Cultural Preferences Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are multinomial logistic regression estimates with 95 percent confidence intervals.",
+#  tablenum = 5
+#)
+#
+### TABLE A-6
+#modelWelfareByRace <- df %>%
+#  nest(-race) %>%
+#  mutate(
+#    model = map(data, ~ polr(
+#      as.factor(welfare) ~ age + educ3 + gender + income + south +
+#        relLinked + relRace + relClose + salRelig,
+#      data = .,
+#      weights = psweight,
+#      method = "logistic",
+#      model = FALSE,
+#      Hess = TRUE
+#    ))
+#  ) %>%
+#  dplyr::select(race, model)
+#
+#
+#
+#oLogitTableByRace(
+#  modelWelfareByRace$model,
+#  filename = "multiracial_jop/welfare_byrace",
+#  names = as.vector(modelWelfareByRace$race),
+#  caption = "Social Welfare Preferences Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are ordered logistic regression estimates with 95 percent confidence intervals.",
+#  tablenum = 6
+#)
+#
+### TABLE A-7
+#modelPoliceByRace <- df %>%
+#  nest(-race) %>%
+#  mutate(
+#    model = map(data, ~ polr(
+#    as.factor(police) ~ age + educ3 + gender + income + south +
+#      relLinked + relRace + relClose + salRelig,
+#    data = .,
+#    weights = psweight,
+#    method = "logistic",
+#    model = FALSE,
+#    Hess = TRUE
+#  ))
+#  ) %>%
+#  dplyr::select(race, model)
+#
+#
+#oLogitTableByRace(
+#  modelPoliceByRace$model,
+#  filename = "multiracial_jop/police_byrace",
+#  names = as.vector(modelPoliceByRace$race),
+#  caption = "Perceptions of Police Treatment of Minorities Among Monoracial and Biracial Whites, Blacks, and Asians. \\it{Note}: Values shown are ordered logistic regression estimates with 95 percent confidence intervals.",
+#  tablenum = 7
+#)
+#
+#
+#
+#
+### DESCRIPTIVES
+#
+###TABLE A-8
+#reporttools::tableContinuous(
+#  vars = continuous,
+#  group = group,
+#  stats = c("n", "min", "q1", "median", "mean", "q3", "max", "s", "iqr"),
+#  cap = "Demographic Characteristics by Racial Group (Continuous Variables)",
+#  lab = "tab:age",
+#  longtable = FALSE,
+#  file = "multiracial_jop/cont.tex"
+#  )
+#
+#
+### TABLE A-9
+## gender, age, education, income, region
+#factors <- data.frame(
+#  "Gender" = df$gender,
+#  "Education" = df$educ3,
+#  "Income" = str_replace_all(as.character(df$faminc), '\\$', '\\\\$'),
+#  "South" = ifelse(df$south == 1, 'South', 'Non-South')
+#)
+#
+#group <- df$race
+#continuous <- data.frame("Age" = df$age)
+#
+#reporttools::tableNominal(
+#  vars = factors,
+#  group = group,
+#  vertical = TRUE,
+#  cap = "Demographic Characteristics by Racial Group (Nominal Variables)",
+#  lab = "tab:nominal",
+#  longtable = TRUE,
+#  cumsum = FALSE,
+#  file = "multiracial_jop/nominal.tex",
+#  rotate.colnames = TRUE
+#)

@@ -69,5 +69,6 @@ install.packages(
     "questionr",
     "ggridges",
     "reporttools",
-    "stringr")
+    "stringr",
+    "weights") #gets called inline, but not at the start of the script
 )
