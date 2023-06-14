@@ -1023,7 +1023,7 @@ weights::wtd.chi.sq(df$police, df$race, weight = df$psweight, na.rm = TRUE)
 #  rotate.colnames = TRUE
 #)
 
-                   )
-)
 }
-       )
+)
+)
+)

@@ -17,7 +17,7 @@ header-includes:
 
 \date{\today}
 \title{\textbf{Replication materials are great but software versioning still poses a problem for open science}}
-\author{Bruno Rodrigues \thanks{Ministry of Higher Education and Research, Luxembourg} \and Taylor J. Wright\thanks{Brock University, \href{mailto:twright3@brocku.ca}{twright3@brocku.ca}}
+Taylor J. Wright\thanks{Brock University, \href{mailto:twright3@brocku.ca}{twright3@brocku.ca}} \and \author{Bruno Rodrigues \thanks{Ministry of Higher Education and Research, Luxembourg}
 }
 
 ```{r, echo=FALSE, include=FALSE}
@@ -84,7 +84,137 @@ Soemthing about how there are ways to ensure that the estimates are consistent (
 
 ## Discussion
 
-### Using Docker {groundhog} to ensure reproducibility 
+### Rebuilding the original development environment using Docker
+
+Replicating results from past studies is quite challenging, for many reasons.
+This articles focuses on one of these reasons: results cannot be reproduced
+because of changes introduced in more recent versions of the software used for
+analysis, despite the availability of both data and replication scripts.
+
+To replicate the results from the original study and to pinpoint the impact of
+the change introduced in R 3.6.0, we chose to use Docker. Docker is a
+containerization tool which enables one to build so-called *images*. These
+images contain a software product alongside its dependencies and even pieces of
+a Linux operating system. To use the software product, customers in turn only
+need to be able to run Docker *containers* from the image definition.
+Containerization tools such as Docker solved the "works on my machine" problem:
+this problem arises when software that works well on the development machine of
+the developer fails to run successfully on a customer's machine. This usually
+happens because the customer's computer does not have the necessary dependencies
+to run the software (which are traditionally not shipped alongside the software
+product).
+
+A research project can also be seen as a *software product*, and suffers thus
+from the same "works on my machine" problem as any other type of software.
+Containerization tools offer a great opportunity for reproducibility in
+research: instead of just sharing a replication script, authors can now easily
+share the right version of the software used to produce these scripts, as well
+as the right version of the used libraries by building and sharing a Docker
+image (or at least provide the necessary blueprint to enable others to do so, as
+we will discuss below). Future researchers looking to replicate the results can
+now simple run a container from the provided image (or build an image themselves
+if the original authors provided the required blueprints).
+
+Concretely, to build a Docker image, a researcher writes a so-called *Dockerfile*.
+Here is an example of a very simple Dockerfile:
+
+```
+FROM rocker/r-ver:4.3.0
+
+CMD ["R"]
+```
+
+This Dockerfile contains two lines: the first line states which Docker image we
+are going to use as a base. Our image will be based on the 'rocker/r-ver:4.3.0'
+image. The Rocker project is a repository containing many images that ship
+different versions of R and packages pre-installed: so the image called
+`r-ver:4.3.0` is an image that ships R version 4.3.0. The last line states which
+command should run when the user runs a container defined from our image, so in
+this case, simply the R interactive prompt. Below is an example of a Dockerfile
+that runs an analysis script:
+
+```
+FROM rocker/r-ver:4.3.0
+
+RUN R -e "install.packages('dplyr')"
+
+RUN mkdir /home/research_project
+
+RUN mkdir /home/research_project/project_output
+
+RUN mkdir /home/research_project/shared_folder
+
+COPY analyse_data.R /home/research_project/analyse_data.R
+
+RUN cd /home/research_project && R -e "source('analyse_data.R')"
+
+CMD mv /home/research_project/project_output/* /home/research_project/shared_folder/
+```
+
+This Dockerfile starts off from the same base image, an image that ships R
+version 4.3.0, than it install the `{dplyr}` package, a popular R package for
+data manipulation and it creates three directories:
+
+- `/home/research_project`
+- `/home/research_project/project_output`
+- `/home/research_project/shared_folder`.
+
+Then, it copies the `analyse_data.R` script, which contains the actual analysis
+made for the purposes of the research project, into the Docker image. The
+second-to-last line runs the script, and the last line moves the outputs
+generated from running the `analyse_data.R` script to a folder called
+`shared_folder`. It is important to say that `RUN` statements will be executed
+as the image gets built, and `CMD` statements will be executed as a container
+runs. Using this Dockerfile, an image called `research_project` can be built
+with the following command:
+
+```
+docker build -t research_project .
+```
+
+This image can then be archived and shared for replication purposes. Future
+researchers can then run a container from that image using a command
+such as:
+
+```
+docker run -d -it --rm --name research_project_container \
+  -v /host/machine/shared_folder:/home/research_project/shared_folder:rw \
+  research_project
+```
+
+The container, called `research_project_container` will execute the `CMD`
+statement from the Dockerfile, in other words, move the outputs to the
+`shared_folder`. This folder is like a door between the machine that
+runs the container and the container: by doing this, the outputs generated
+within the container can now be accessed from the host's computer.
+
+The image built by the process above is immutable: so as long as users can run
+it, the outputs produced will be exactly the same as when the original author
+ran the original analysis. However, if the image gets lost, and needs to be
+rebuilt, the above Dockerfile will not generate the same image. This is because
+the Dockerfile, as it is written above, will download the version of `{dplyr}`
+that is current at the time it gets built. So if a user instead builds the image
+in 5 years, the version of `{dplyr}` that will get downloaded. The version of R,
+however, will forever remain at version 4.3.0.
+
+So to ensure that future researchers will download the right versions of packages
+that were originally used for the project, the original researcher also needs
+to provide a list of packages and their versions. This can be quite tedious
+if done by hand, but thankfully, there are ways to generate such lists very
+easily. The `{renv}` package for the R programming language provides such a function.
+Once the project is done, one simply needs to call:
+
+```
+renv::init()
+renv::hydrate()
+renv::snapshot()
+```
+
+to generate a file called `renv.lock`. This file contains the R version that was used
+to generate it, the list of packages that were used for the project, as well as their
+versions and links to download them.
+
+
 
 ### Reproducibility isn't just version and package management — using {targets} to improve readibility and reproducibility
 
