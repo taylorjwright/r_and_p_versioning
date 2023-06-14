@@ -17,7 +17,7 @@ header-includes:
 
 \date{\today}
 \title{\textbf{Replication materials are great but software versioning still poses a problem for open science}}
-Taylor J. Wright\thanks{Brock University, \href{mailto:twright3@brocku.ca}{twright3@brocku.ca}} \and \author{Bruno Rodrigues \thanks{Ministry of Higher Education and Research, Luxembourg}
+\author{Taylor J. Wright\thanks{Brock University, \href{mailto:twright3@brocku.ca}{twright3@brocku.ca}} \and Bruno Rodrigues \thanks{Ministry of Higher Education and Research, Luxembourg}
 }
 
 ```{r, echo=FALSE, include=FALSE}
