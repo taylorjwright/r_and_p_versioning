@@ -148,7 +148,7 @@ simulations_m2w %>%
 ### Rebuilding the original development environment using Docker
 
 Replicating results from past studies is quite challenging, for many reasons.
-This articles focuses on one of these reasons: results cannot be reproduced
+This article focuses on one of these reasons: results cannot be reproduced
 because of changes introduced in more recent versions of the software used for
 analysis, despite the availability of both data and replication scripts.
 
@@ -163,7 +163,7 @@ this problem arises when software that works well on the development machine of
 the developer fails to run successfully on a customer's machine. This usually
 happens because the customer's computer does not have the necessary dependencies
 to run the software (which are traditionally not shipped alongside the software
-product).
+product) or because of version mismatch of the operating system.
 
 A research project can also be seen as a *software product*, and suffers thus
 from the same "works on my machine" problem as any other type of software.
@@ -213,7 +213,7 @@ CMD mv /home/research_project/project_output/* /home/research_project/shared_fol
 ```
 
 This Dockerfile starts off from the same base image, an image that ships R
-version 4.3.0, than it install the `{dplyr}` package, a popular R package for
+version 4.3.0, then it installs the `{dplyr}` package, a popular R package for
 data manipulation and it creates three directories:
 
 - `/home/research_project`
@@ -245,7 +245,7 @@ docker run -d -it --rm --name research_project_container \
 
 The container, called `research_project_container` will execute the `CMD`
 statement from the Dockerfile, in other words, move the outputs to the
-`shared_folder`. This folder is like a door between the machine that
+`shared_folder`. This folder is like a tunnel between the machine that
 runs the container and the container: by doing this, the outputs generated
 within the container can now be accessed from the host's computer.
 
@@ -255,17 +255,18 @@ ran the original analysis. However, if the image gets lost, and needs to be
 rebuilt, the above Dockerfile will not generate the same image. This is because
 the Dockerfile, as it is written above, will download the version of `{dplyr}`
 that is current at the time it gets built. So if a user instead builds the image
-in 5 years, the version of `{dplyr}` that will get downloaded. The version of R,
+in 5 years, the version of `{dplyr}` that will get downloaded will not be the
+same as the one that was actually used for the original analysis. The version of R,
 however, will forever remain at version 4.3.0.
 
 So to ensure that future researchers will download the right versions of packages
 that were originally used for the project, the original researcher also needs
-to provide a list of packages and their versions. This can be quite tedious
+to provide a list of packages that were used and their versions. This can be quite tedious
 if done by hand, but thankfully, there are ways to generate such lists very
 easily. The `{renv}` package for the R programming language provides such a function.
 Once the project is done, one simply needs to call:
 
-```
+```{r, eval = FALSE}
 renv::init()
 renv::hydrate()
 renv::snapshot()
@@ -276,7 +277,7 @@ to generate it, the list of packages that were used for the project, as well as 
 versions and links to download them. This file can be used to easily install all the
 required packages in the future by simply running:
 
-```
+```{r, eval = FALSE}
 renv::restore()
 ```
 
@@ -297,7 +298,42 @@ the right version of R, then the right version of the packages that they used, r
 their original script, and then repeat this procedure but this time on a recent
 version of R.
 
+In order to achieve this, we used a Docker image provided by the 
+[R Installation Manager](https://github.com/r-lib/rig)^[https://github.com/r-lib/rig]
+project. This Docker image includes a tool, called `rig`, that makes it easy to switch R 
+versions, so we used it to first define an image that would use R version 3.5.0 by default 
+as a base. Here are the three commands from the Dockerfile to achieve this:
 
+```
+FROM rhub/rig:latest
+
+RUN rig install 3.5.0
+
+RUN rig default 3.5.0
+```
+
+Then, we had to install the packages that the original authors used to perform their analysis. We had
+to make some assumptions: since we only had the list of used packages, but not their
+exact versions, we assumed that the required packages were installed one year before
+the paper was published, so sometime in May 2019. With this assumption, we then used
+the [Posit Package Manager](https://packagemanager.posit.co/client/#/repos/2/overview)^[https://packagemanager.posit.co/client/#/repos/2/overview…, 
+which provides snapshots of CRAN that can be used to install R packages as they were 
+on a given date. We thus configured R to download packages from the snapshot taken on
+May 16th, 2019. Then, the original replication script gets executed at image build time
+and we can obtain the outputs from running a container from this image definition. 
+With this setup, it was very simple to only switch R version and re-executed everything.
+We simply had to switch the commands from the Dockerfile:
+
+```
+FROM rhub/rig:latest
+
+RUN rig install 4.2.0
+
+RUN rig default 4.2.0
+```
+
+Everything else: package versions and operating system that the replication script runs on, stayed
+the same.
 
 ### Reproducibility isn't just version and package management — using {targets} to improve readibility and reproducibility
 
