@@ -41,7 +41,7 @@ In recent years, the ''replication crisis'' in the social sciences has become ma
 These concerns about the reproducibility and replicability of social science research have prompted a push for journals to require the publication of research materials that accompany academic research (see, for example, the 2014 Joint Editors Transparency Statement which was signed by editors of 27 leading political science journals: \url{https://www.dartstatement.org/2014-journal-editors-statement-jets}). Specifically, the provision of underlying data and scripts used for data preparation and analysis. However, even if these materials are provided (and even when in place these policies do not have perfect compliance (@philip2010report, @stockemer2018data)), the regular software updates and new version releases can result in the replication materials failing to faithfully reproduce the authors' results or even run at all (@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R} changes that could break scripts). 
 
 
-In this paper we ppresent a case study of an article published in Journal of Politics in January 2022 titled, ``Multiracial Identity and Political Preferences'', @davenport2022multiracial, that details that replication challenges arising from changes in the statistical software \texttt{R}. We were unable to reproduce the authors' results using either the current version of \texttt{R}, or the version that the authors indicate they used. The lack of reproducibility arose due to a change in the defaults used by base \texttt{R} when generating random numbers starting in version 3.6.0. 
+In this paper we present a case study of an article published in Journal of Politics in January 2022 titled, ``Multiracial Identity and Political Preferences'', @davenport2022multiracial, that details that replication challenges arising from changes in the statistical software \texttt{R}. We were unable to reproduce the authors' results using either the current version of \texttt{R}, or the version that the authors indicate they used. The lack of reproducibility arose due to a change in the defaults used by base \texttt{R} when generating random numbers starting in version 3.6.0.
 
 We contribute to the existing literature...
 
@@ -108,13 +108,13 @@ simulations_m2m <- tibble(paths = simulations_m2m_paths) %>%
 simulations_m2m %>%
   group_by(race, model) %>%
   summarise(
-    q_005_mean = quantile(mean, probs = 0.05),
-    q_20_mean = quantile(mean, probs = 0.2),
-    q_40_mean = quantile(mean, probs = 0.4),
-    q_50_mean = quantile(mean, probs = 0.5),
-    q_60_mean = quantile(mean, probs = 0.6),
-    q_80_mean = quantile(mean, probs = 0.8),
-    q_95_mean = quantile(mean, probs = 0.95)
+    q_05_mean = round(quantile(mean, probs = 0.05), 2),
+    q_20_mean = round(quantile(mean, probs = 0.2), 2),
+    q_40_mean = round(quantile(mean, probs = 0.4), 2),
+    q_50_mean = round(quantile(mean, probs = 0.5), 2),
+    q_60_mean = round(quantile(mean, probs = 0.6), 2),
+    q_80_mean = round(quantile(mean, probs = 0.8), 2),
+    q_95_mean = round(quantile(mean, probs = 0.95) 2)
   ) %>%
   flextable()
 ```
@@ -133,13 +133,13 @@ simulations_m2w <- tibble(paths = simulations_m2w_paths) %>%
 simulations_m2w %>%
   group_by(race, model) %>%
   summarise(
-    q_005_mean = quantile(mean, probs = 0.05),
-    q_20_mean = quantile(mean, probs = 0.2),
-    q_40_mean = quantile(mean, probs = 0.4),
-    q_50_mean = quantile(mean, probs = 0.5),
-    q_60_mean = quantile(mean, probs = 0.6),
-    q_80_mean = quantile(mean, probs = 0.8),
-    q_95_mean = quantile(mean, probs = 0.95)
+    q_05_mean = round(quantile(mean, probs = 0.05), 2),
+    q_20_mean = round(quantile(mean, probs = 0.2), 2),
+    q_40_mean = round(quantile(mean, probs = 0.4), 2),
+    q_50_mean = round(quantile(mean, probs = 0.5), 2),
+    q_60_mean = round(quantile(mean, probs = 0.6), 2),
+    q_80_mean = round(quantile(mean, probs = 0.8), 2),
+    q_95_mean = round(quantile(mean, probs = 0.95) 2)
   ) %>%
   flextable()
 
@@ -157,13 +157,14 @@ the change introduced in R 3.6.0, we chose to use Docker. Docker is a
 containerization tool which enables one to build so-called *images*. These
 images contain a software product alongside its dependencies and even pieces of
 a Linux operating system. To use the software product, customers in turn only
-need to be able to run Docker *containers* from the image definition.
-Containerization tools such as Docker solved the "works on my machine" problem:
-this problem arises when software that works well on the development machine of
-the developer fails to run successfully on a customer's machine. This usually
-happens because the customer's computer does not have the necessary dependencies
-to run the software (which are traditionally not shipped alongside the software
-product) or because of version mismatch of the operating system.
+need to be able to run Docker *containers* instantiated from the image
+definition. Containerization tools such as Docker solved the "works on my
+machine" problem: this problem arises when software that works well on the
+development machine of the developer fails to run successfully on a customer's
+machine. This usually happens because the customer's computer does not have the
+necessary dependencies to run the software (which are traditionally not shipped
+alongside the software product) or because of version mismatch of the operating
+system.
 
 A research project can also be seen as a *software product*, and suffers thus
 from the same "works on my machine" problem as any other type of software.
@@ -186,7 +187,7 @@ CMD ["R"]
 ```
 
 This Dockerfile contains two lines: the first line states which Docker image we
-are going to use as a base. Our image will be based on the 'rocker/r-ver:4.3.0'
+are going to use as a base. Our image will be based on the `rocker/r-ver:4.3.0`
 image. The Rocker project is a repository containing many images that ship
 different versions of R and packages pre-installed: so the image called
 `r-ver:4.3.0` is an image that ships R version 4.3.0. The last line states which
@@ -245,9 +246,9 @@ docker run -d -it --rm --name research_project_container \
 
 The container, called `research_project_container` will execute the `CMD`
 statement from the Dockerfile, in other words, move the outputs to the
-`shared_folder`. This folder is like a tunnel between the machine that
-runs the container and the container: by doing this, the outputs generated
-within the container can now be accessed from the host's computer.
+`shared_folder`. This folder is like a tunnel between the machine that runs the
+container and the container itself: by doing this, the outputs generated within
+the container can now be accessed from the host's computer.
 
 The image built by the process above is immutable: so as long as users can run
 it, the outputs produced will be exactly the same as when the original author
@@ -256,15 +257,16 @@ rebuilt, the above Dockerfile will not generate the same image. This is because
 the Dockerfile, as it is written above, will download the version of `{dplyr}`
 that is current at the time it gets built. So if a user instead builds the image
 in 5 years, the version of `{dplyr}` that will get downloaded will not be the
-same as the one that was actually used for the original analysis. The version of R,
-however, will forever remain at version 4.3.0.
+same as the one that was actually used for the original analysis. The version of
+R, however, will forever remain at version 4.3.0.
 
-So to ensure that future researchers will download the right versions of packages
-that were originally used for the project, the original researcher also needs
-to provide a list of packages that were used and their versions. This can be quite tedious
-if done by hand, but thankfully, there are ways to generate such lists very
-easily. The `{renv}` package for the R programming language provides such a function.
-Once the project is done, one simply needs to call:
+So to ensure that future researchers will download the right versions of
+packages that were originally used for the project, the original researcher also
+needs to provide a list of packages that were used as well as the packages'
+versions. This can be quite tedious if done by hand, but thankfully, there are
+ways to generate such lists very easily. The `{renv}` package for the R
+programming language provides such a function. Once the project is done, one
+simply needs to call:
 
 ```{r, eval = FALSE}
 renv::init()
@@ -272,17 +274,17 @@ renv::hydrate()
 renv::snapshot()
 ```
 
-to generate a file called `renv.lock`. This file contains the R version that was used
-to generate it, the list of packages that were used for the project, as well as their
-versions and links to download them. This file can be used to easily install all the
-required packages in the future by simply running:
+to generate a file called `renv.lock`. This file contains the R version that was
+used to generate it, the list of packages that were used for the project, as
+well as their versions and links to download them. This file can be used to
+easily install all the required packages in the future by simply running:
 
 ```{r, eval = FALSE}
 renv::restore()
 ```
 
-A researcher can thus add the following steps in the Dockerfile to download the right
-packages when building the image:
+A researcher can thus add the following steps in the Dockerfile to download the
+right packages when building the image:
 
 ```
 COPY renv.lock /home/research_project/renv.lock
@@ -294,15 +296,16 @@ However, what should researchers that want to replicate a past study do if the
 original researcher did not provide a Dockerfile nor an `renv.lock` file? This
 is exactly the challenge that we were facing when trying to replicate the
 results of @davenport2022multiracial. We needed to find a way to first, install
-the right version of R, then the right version of the packages that they used, run
-their original script, and then repeat this procedure but this time on a recent
-version of R.
+the right version of R, then the right version of the packages that they used,
+run their original script, and then repeat this procedure but this time on a
+recent version of R.
 
-In order to achieve this, we used a Docker image provided by the 
-[R Installation Manager](https://github.com/r-lib/rig)^[https://github.com/r-lib/rig]
-project. This Docker image includes a tool, called `rig`, that makes it easy to switch R 
-versions, so we used it to first define an image that would use R version 3.5.0 by default 
-as a base. Here are the three commands from the Dockerfile to achieve this:
+In order to achieve this, we used a Docker image provided by the [R Installation
+Manager](https://github.com/r-lib/rig)^[https://github.com/r-lib/rig] project.
+This Docker image includes a tool, called `rig`, that makes it easy to switch R
+versions, so we used it to first define an image that would use R version 3.5.0
+by default as a base. Here are the three commands from the Dockerfile to achieve
+this:
 
 ```
 FROM rhub/rig:latest
@@ -312,17 +315,19 @@ RUN rig install 3.5.0
 RUN rig default 3.5.0
 ```
 
-Then, we had to install the packages that the original authors used to perform their analysis. We had
-to make some assumptions: since we only had the list of used packages, but not their
-exact versions, we assumed that the required packages were installed one year before
-the paper was published, so sometime in May 2019. With this assumption, we then used
-the [Posit Package Manager](https://packagemanager.posit.co/client/#/repos/2/overview)^[https://packagemanager.posit.co/client/#/repos/2/overview…, 
-which provides snapshots of CRAN that can be used to install R packages as they were 
-on a given date. We thus configured R to download packages from the snapshot taken on
-May 16th, 2019. Then, the original replication script gets executed at image build time
-and we can obtain the outputs from running a container from this image definition. 
-With this setup, it was very simple to only switch R version and re-executed everything.
-We simply had to switch the commands from the Dockerfile:
+Then, we had to install the packages that the original authors used to perform
+their analysis. We had to make some assumptions: since we only had the list of
+used packages, but not their exact versions, we assumed that the required
+packages were installed one year before the paper was published, so sometime in
+May 2019. With this assumption, we then used the [Posit Package
+Manager](https://packagemanager.posit.co/client/#/repos/2/overview)^[https://packagemanager.posit.co/client/#/repos/2/overview],
+which provides snapshots of CRAN that can be used to install R packages as they
+were on a given date. We thus configured R to download packages from the
+snapshot taken on May 16th, 2019. Then, the original replication script gets
+executed at image build time and we can obtain the outputs from running a
+container from this image definition. With this setup, it was very simple to
+only switch R versions and re-executed everything. We simply had to switch the
+commands from the Dockerfile:
 
 ```
 FROM rhub/rig:latest
@@ -332,10 +337,58 @@ RUN rig install 4.2.0
 RUN rig default 4.2.0
 ```
 
-Everything else: package versions and operating system that the replication script runs on, stayed
-the same.
+Everything else: package versions and operating system that the replication
+script runs on, stayed the same.
+
+With this setup, we were thus able to run the original analysis on an
+environment that was as close as possible to the original environment used by
+@davenport2022multiracial. However, it is impossible to regenerate the exact
+environment now. As stated, we had to make an assumption on the date the
+packages were downloaded, but the packages use by the original authors might
+have been much older. Another likely difference is that the operating system
+used inside Docker is the Ubuntu Linux distribution. While Ubuntu is a popular
+Linux distribution, it is much more likely that the original authors used either
+Windows or macOS to perform their analysis. In most cases, the operating system
+does not have an impact on results, but there have been replication studies that
+failed because of this, as in @neupane2019. Thankfully, mismatch of the
+operating system does not seem to be an issue here.
 
 ### Reproducibility isn't just version and package management — using {targets} to improve readibility and reproducibility
+
+Reproducibility should go beyond providing the right versions of the analysis
+software used. Another import aspect is *readability*, which is difficult to
+quantify. There are however some approaches that we suggest researchers could
+employ to improve the readability of their code and thus increase the
+probability of a successful replication.
+
+Most research papers and studies' computer code is written as one, or several
+scripts that must be run in a certain order. These script-based workflows
+usually grow very large and become chaotic. Documentation must be written
+alongside the scripts to explain how they work and in which order they're
+supposed to be executed, and this documentation then has to be maintained and
+updated as the scripts evolve. When some parts of the code gets changed in one
+script, the researcher has to remember which parts of the other scripts get
+impacted and either only run the relevant, now outdated, parts, or re-run the
+whole project which can be quite time-consuming. Here again, it helps to view a
+researcher paper (and in particular its computer code) as a piece of software.
+Software engineers are faced with the exact same problem but solved it many
+decades ago using so-called build automation tools. These build automation tools
+allow one to describe how a particular piece of software should get build. Other
+software engineers that which to build that piece of software thus only need to
+execute the build automation tool which will take care of executing the right
+steps in the right order.
+
+The solution we propose is for researchers to use build automation tools. For the
+R programming language, a very popular build automation tool is provided through
+the `{targets}` package. Using `{targets}` has many benefits:
+
+- `{targets}` keeps track of all the inter-dependencies between the different pieces of the entire codebase. If some part gets changed, `{targets}` *knows* which other parts are affected and only re-executes these;
+- another consequence of this is that `{targets}` also knows which parts of the codebase are independent from each other and can thus be safely executed in parallel. This can lead to tremendous execution speed gains;
+- `{targets}` works by having the user define the computations as a pipeline. This pipeline is in essence the composition of many pure functions, which increases the readibility of the project.
+
+As an illustration of this, we rewrote the original study as a `{targets}`
+pipeline.
+
 
 
 \newpage
