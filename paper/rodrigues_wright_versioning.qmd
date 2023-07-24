@@ -114,7 +114,7 @@ simulations_m2m %>%
     q_50_mean = round(quantile(mean, probs = 0.5), 2),
     q_60_mean = round(quantile(mean, probs = 0.6), 2),
     q_80_mean = round(quantile(mean, probs = 0.8), 2),
-    q_95_mean = round(quantile(mean, probs = 0.95) 2)
+    q_95_mean = round(quantile(mean, probs = 0.95), 2)
   ) %>%
   flextable()
 ```
@@ -139,7 +139,7 @@ simulations_m2w %>%
     q_50_mean = round(quantile(mean, probs = 0.5), 2),
     q_60_mean = round(quantile(mean, probs = 0.6), 2),
     q_80_mean = round(quantile(mean, probs = 0.8), 2),
-    q_95_mean = round(quantile(mean, probs = 0.95) 2)
+    q_95_mean = round(quantile(mean, probs = 0.95), 2)
   ) %>%
   flextable()
 
