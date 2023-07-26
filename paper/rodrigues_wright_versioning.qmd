@@ -36,14 +36,33 @@ library(flextable)
 
 ## Introduction
 
-In recent years, the ''replication crisis'' in the social sciences has become mainstream, even featured in the popular press. Concerns over how well studies hold up to replication in other settings has lead to large scale initiatives to document how trustworthy the existing stock of evidence is (cite  Camerer and Nosek). While the replicability of studies in important, there has been a tandem movement discussing how reproducible research results are. There are various definitions, but for broadly speaking replication is in some sense re-testing a hypothesis while changing an element of previous research (e.g. the sample, or the estimating equation) whereas reproducibility is following a study's protocol exactly and obtaining the results presented in the study (insert a citation with some definitions here, perhaps Lars' blog or Michael Clemens JES paper?). In our view, reproducibility is an insufficient but necessary condition for replication---that is, it does not make sense to spend resources on replciation if research is not reproducible.   
+NOTE: I don't exactly like what's here for the reproducibility and replication stuff. A little too abrupt, needs more flow and of course, some citations. 
 
-These concerns about the reproducibility and replicability of social science research have prompted a push for journals to require the publication of research materials that accompany academic research (see, for example, the 2014 Joint Editors Transparency Statement which was signed by editors of 27 leading political science journals: \url{https://www.dartstatement.org/2014-journal-editors-statement-jets}). Specifically, the provision of underlying data and scripts used for data preparation and analysis. However, even if these materials are provided (and even when in place these policies do not have perfect compliance (@philip2010report, @stockemer2018data)), the regular software updates and new version releases can result in the replication materials failing to faithfully reproduce the authors' results or even run at all (@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R} changes that could break scripts). 
+In recent years, the "replication crisis" in the social sciences has become mainstream, even featured in the popular press (@aschwanden2015, @gelman2018). 
+Concerns over how well published results hold up to replication in other settings has lead to large scale initiatives to document how trustworthy the existing stock of evidence is (cite  Camerer and Nosek). 
+While the *replicability* of studies in important, there has been a tandem movement discussing how *reproducible* research results are. 
+There are various definitions, but broadly speaking replication is in some sense re-testing a hypothesis while changing an element of previous research (e.g. the sample, or the estimating equation) whereas reproducibility is following a study's protocol exactly and obtaining the results presented in the study (insert a citation with some definitions here, perhaps Lars' blog or Michael Clemens JES paper?). 
+In our view, reproducibility is an insufficient but necessary condition for replication---that is, it does not make sense to spend resources on replciation if research is not reproducible.   
 
+NOTE: Still need to add some citations here and expand a little on the numbers for journals with data availability policies (especially over time).
 
-In this paper we present a case study of an article published in Journal of Politics in January 2022 titled, ``Multiracial Identity and Political Preferences'', @davenport2022multiracial, that details that replication challenges arising from changes in the statistical software \texttt{R}. We were unable to reproduce the authors' results using either the current version of \texttt{R}, or the version that the authors indicate they used. The lack of reproducibility arose due to a change in the defaults used by base \texttt{R} when generating random numbers starting in version 3.6.0.
+These concerns about the reproducibility and replicability of social science research have prompted a push, often referred to as Data Access and Research Transparency (DA-RT), for journals to require the publication of research materials that accompany academic research.^[See, for example, the 2014 Joint Editors Transparency Statement which was signed by editors of 27 leading political science journals: \url{https://www.dartstatement.org/2014-journal-editors-statement-jets}] 
+Specifically, the provision of underlying data and scripts used for data preparation and analysis. 
+This push has seen some success, with a growing number journals now requiring the provision of replication materials as a condition of publication.
+Some journals, such as the American Econonmic Review (AER) or American Journal of Political Science (AJPS), even have verification policies that require authors upload their replication materials and have their results verified by another team (either the journal's replication team (AER) or a third party, (AJPS)) prior to publication.
+However, even if these materials are provided, and even when in place these policies do not have perfect compliance (@philip2010report, @stockemer2018data), regular software updates and new version releases can result in the replication materials failing to faithfully reproduce the authors' results or even run at all. ^[@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R} changes that could break scripts.]
+
+In this paper we present a case study of an article published in Journal of Politics in January 2022 titled, ``Multiracial Identity and Political Preferences'', @davenport2022multiracial, that details that replication challenges arising from changes in the statistical software \texttt{R}. 
+We were unable to reproduce the authors' results using either the current version of \texttt{R}, or the version that the authors indicate they used.
+The lack of reproducibility arose due to a change in the defaults used by base \texttt{R} when generating random numbers starting in version 3.6.0.
 
 We contribute to the existing literature...
+Strand 1: Discussion of importance of availablility of replication/reproducibility materials
+Contribution 1: A necessary but insufficient condition 
+Strand 2: Discussion of problems raised by software and package versioning for reproducibility
+Contribution 2: A walk through of the problem with a concrete example
+Strand 3: Discussion of tools and best practices for ensuring reproducibility
+Contribution 3: Step-by-step guide to using Docker, {renv}, and {targets} to ensure reproducibility
 
 The rest of the article proceeds as follows: Section 2 walks through the reproducibility issues in @davenport2022multiracial; Section 3 discusses currently available tools and best practices (e.g. Docker and \texttt{R} packages such as \texttt{renv}, \texttt{groundhog}) for ensuring that replication materials continue to faithfully reproduce research results, despite post-publication changes in the tools used; and Section 4 concludes.
 
