@@ -310,7 +310,7 @@ RUN R -e "setwd('/home/research_project);renv::init();renv::restore()"
 However, what should researchers that want to replicate a past study do if the
 original researcher did not provide a Dockerfile nor an `renv.lock` file? This
 is exactly the challenge that we were facing when trying to replicate the
-results of @davenport2022multiracial. We needed to find a way to first install
+results of @davenport2022multiracial. We needed to find a way to first, install
 the right version of R, then the right version of the packages that they used,
 run their original script, and then repeat this procedure but this time on a
 recent version of R.
