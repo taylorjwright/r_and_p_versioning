@@ -3,8 +3,9 @@ library(tarchetypes)
 
 list(
   tar_quarto(
-    paper,
-    "paper/rodrigues_wright_versioning.qmd"
+    name = paper,
+    path = "paper/rodrigues_wright_versioning.qmd",
+    output_format = "pdf"
   )
 
 )
