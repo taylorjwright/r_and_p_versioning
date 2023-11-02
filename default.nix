@@ -7,7 +7,7 @@ let
   inherit (pkgs.texlive) scheme-small amsmath booktabs setspace lineno cochineal tex-gyre framed multirow wrapfig tcolorbox environ tikzfill pdfcol;
 });
  system_packages = builtins.attrValues {
-  inherit (pkgs) R quarto;
+  inherit (pkgs) R quarto pandoc;
 };
 in
  pkgs.mkShell {
