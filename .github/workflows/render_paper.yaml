@@ -29,7 +29,9 @@ jobs:
         nix-build
   
     - name: Render PDF
-      uses: b-rodrigues/quarto-nix-actions/render@main
+      uses: b-rodrigues/quarto-nix-actions/publish@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       with:
+        path: paper
         to: pdf
-        path: paper/
