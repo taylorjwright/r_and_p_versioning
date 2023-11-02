@@ -27,7 +27,8 @@ jobs:
     - name: Build development environment
       run: |
         nix-build
-    - name: Publish to GitHub Pages (and render)
+  
+    - name: Render PDF
       uses: b-rodrigues/quarto-nix-actions/render@main
       with:
         to: pdf
