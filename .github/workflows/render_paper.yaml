@@ -32,5 +32,3 @@ jobs:
       uses: b-rodrigues/quarto-nix-actions/publish@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-      with:
-        path: paper
