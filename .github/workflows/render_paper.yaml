@@ -34,3 +34,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         path: paper/rodrigues_wright_versioning.qmd
+        target: rendered_pdf
