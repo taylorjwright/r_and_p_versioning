@@ -2,10 +2,11 @@ library(targets)
 library(tarchetypes)
 
 list(
-  tar_target(
+  tar_force(
     name = paper,
-    quarto::quarto_render("paper/"),
-    format = "file"
+    command = quarto::quarto_render("paper/"),
+    format = "file", 
+    force = TRUE
   )
 
 )
