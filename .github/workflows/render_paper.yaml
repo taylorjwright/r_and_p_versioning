@@ -34,4 +34,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       with:
         path: paper
-        to: pdf

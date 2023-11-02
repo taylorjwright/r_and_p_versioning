@@ -1,2 +1,4 @@
 project:
   output-dir: .
+
+format: pdf
