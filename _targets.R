@@ -2,9 +2,9 @@ library(targets)
 library(tarchetypes)
 
 list(
-  tar_quarto(
+  tar_target(
     name = paper,
-    path = "paper/"
+    quarto::quarto_render("paper/")
   )
 
 )
