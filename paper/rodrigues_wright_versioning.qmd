@@ -368,6 +368,11 @@ does not have an impact on results, but there have been replication studies that
 failed because of this, as in @neupane2019. Thankfully, mismatch of the
 operating system does not seem to be an issue here.
 
+Instead of using the Posit Package Manager with a fixed date, we could have used
+the `{groundhog}` package by @simonsohn2023. This package makes it possible to
+download packages as of a certain date as well, and it does not require users
+to change any of R's default configurations.
+
 ### Reproducibility isn't just version and package management — using {targets} to improve readibility and reproducibility
 
 Reproducibility should go beyond providing the right versions of the analysis
