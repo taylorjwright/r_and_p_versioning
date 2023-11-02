@@ -401,7 +401,7 @@ the `{targets}` package. Using `{targets}` has many benefits:
 - another consequence of this is that `{targets}` also knows which parts of the codebase are independent from each other and can thus be safely executed in parallel. This can lead to tremendous execution speed gains;
 - `{targets}` works by having the user define the computations as a pipeline. This pipeline is in essence the composition of many pure functions, which increases the readibility of the project.
 
-As an illustration of this, we rewrote the original study as a `{targets}`
+As an illustration of this, we rewrote parts of the original study as a `{targets}`
 pipeline.
 
 
