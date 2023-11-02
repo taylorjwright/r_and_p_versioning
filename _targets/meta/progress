@@ -1,2 +1,5 @@
 name|type|parent|branches|progress
-paper|stem|paper|0|skipped
+paper_change|stem|paper_change|0|started
+paper_change|stem|paper_change|0|built
+paper|stem|paper|0|started
+paper|stem|paper|0|built

@@ -8,6 +8,7 @@ _targets/meta/meta
 _targets/meta/process
 _targets/meta/progress
 _targets/objects/paper
+_targets/objects/paper_change
 rendered_pdf/.nojekyll
 rendered_pdf/paper/rodrigues_wright_versioning.pdf
 result
