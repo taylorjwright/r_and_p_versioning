@@ -310,7 +310,7 @@ RUN R -e "setwd('/home/research_project);renv::init();renv::restore()"
 However, what should researchers that want to replicate a past study do if the
 original researcher did not provide a Dockerfile nor an `renv.lock` file? This
 is exactly the challenge that we were facing when trying to replicate the
-results of @davenport2022multiracial. We needed to find a way to first, install
+results of @davenport2022multiracial. We needed to find a way to first install
 the right version of R, then the right version of the packages that they used,
 run their original script, and then repeat this procedure but this time on a
 recent version of R.
@@ -368,8 +368,22 @@ does not have an impact on results, but there have been replication studies that
 failed because of this, as in @neupane2019. Thankfully, mismatch of the
 operating system does not seem to be an issue here.
 
-Instead of using the Posit Package Manager with a fixed date, we could have used
-the `{groundhog}` package by @simonsohn2023. This package makes it possible to
+It should also be noted that strictly speaking, using Docker is not completely
+reproducible either: this is because the underlying base image, upon which
+we build our complete analysis, also changes through time. In the examples above
+the image we used, `rhub/rig:latest` is based on Ubuntu 22.04, which is, at of
+writing, the latest long-term support release of the Ubuntu operating system. This
+version of Ubuntu thus still gets updated: so when building the image for our project,
+the underlying base image will be different today than from 6 months from now. And
+when the next Ubuntu long-term support will be released, in April 2024, then 
+`rhub/rig:latest` will this time be based upon this new release of Ubuntu. So building
+in May 2024 will yield a different image than now. In order to avoid this, it is
+possible to use a so-called *digest* which ensure that exactly the same image will
+forever be used as a base. For the purposes of this paper we used the following
+image: `rhub/rig@sha256:0667321839be0c2ade5c14fd8c8bbb311a843ddf690081c5d0dd80dcc98bd6c6`.
+
+Finally, to ensure completeness, instead of using the Posit Package Manager with a fixed date,
+we could have used the `{groundhog}` package by @simonsohn2023. This package makes it possible to
 download packages as of a certain date as well, and it does not require users
 to change any of R's default configurations.
 
@@ -381,7 +395,7 @@ quantify. There are however some approaches that we suggest researchers could
 employ to improve the readability of their code and thus increase the
 probability of a successful replication.
 
-Most research papers and studies' computer code is written as one, or several
+Most research papers and studies' computer code is written as one, or several,
 scripts that must be run in a certain order. These script-based workflows
 usually grow very large and become chaotic. Documentation must be written
 alongside the scripts to explain how they work and in which order they're
@@ -393,12 +407,12 @@ whole project which can be quite time-consuming. Here again, it helps to view a
 researcher paper (and in particular its computer code) as a piece of software.
 Software engineers are faced with the exact same problem but solved it many
 decades ago using so-called build automation tools. These build automation tools
-allow one to describe how a particular piece of software should get build. Other
-software engineers that which to build that piece of software thus only need to
+allow one to describe how a particular piece of software should get built. Other
+software engineers that wish to build that piece of software thus only need to
 execute the build automation tool which will take care of executing the right
 steps in the right order.
 
-The solution we propose is for researchers to use build automation tools. For the
+The solution we propose is for researchers to also adopt build automation tools. For the
 R programming language, a very popular build automation tool is provided through
 the `{targets}` package. Using `{targets}` has many benefits:
 
