@@ -412,22 +412,231 @@ software engineers that wish to build that piece of software thus only need to
 execute the build automation tool which will take care of executing the right
 steps in the right order.
 
-The solution we propose is for researchers to also adopt build automation tools. For the
-R programming language, a very popular build automation tool is provided through
-the `{targets}` package. Using `{targets}` has many benefits:
+The solution we propose is for researchers to use build automation tools. For
+the R programming language, a very popular build automation tool is provided
+through the `{targets}` package by @landau2021. Using `{targets}` has many
+benefits:
 
 - `{targets}` keeps track of all the inter-dependencies between the different pieces of the entire codebase. If some part gets changed, `{targets}` *knows* which other parts are affected and only re-executes these;
 - another consequence of this is that `{targets}` also knows which parts of the codebase are independent from each other and can thus be safely executed in parallel. This can lead to tremendous execution speed gains;
 - `{targets}` works by having the user define the computations as a pipeline. This pipeline is in essence the composition of many pure functions, which increases the readibility of the project.
 
-As an illustration of this, we rewrote parts of the original study as a `{targets}`
-pipeline.
+As an illustration of this, we rewrote parts of the original study as a
+`{targets}` pipeline, by re-using the original code from the authors and
+rewriting only what was needed to "port" it to `{targets}`. A `{targets}`
+pipeline is defined by at least one file called `_targets.R`. Within this
+file, a list of `targets` objects is defined. For example, here is the 
+beginning of our `_targets.R` that we had to write for our purposes
+(not shown are the calls to load required libraries and helper functions):
+
+```
+list(
+  tar_target(
+    data_path,
+    "/home/r_and_p/data/multiracial.sav"
+  ),
+  tar_target(
+    multiracial_raw,
+    read_sav(data_path)
+  ),
+  tar_target(
+    multiracial_1,
+    basic_clean_1(multiracial_raw)
+  ),
+  tar_target(
+    multiracial_2,
+    closeness_2(multiracial_1)
+  ),
+```
+
+The first target, `data_path` simply defines the path to the data set from the 
+original study. The second target, `multiracial_raw` is the data loaded into
+memory. This second target is defined as the output of the `read_sav(data_path)`
+command. Because this second target uses the first target as an input, `{targets}`
+is able to detect that these targets are linked. The third target is 
+`multiracial_1`, which is defined as the output of a function called `basic_clean_1()`.
+This is a function that we defined into another script called `functions.R`. This 
+script contains all the code from the original study that was written to clean 
+the data. The only difference is that we have re-defined every piece of code into
+a function. For example, this is what `basic_clean_1()` looks like:
+
+```
+basic_clean_1 <- function(dataset){
+  dataset %>%
+      clean_names() %>%
+      mutate(across(where(is.labelled),
+                    as_factor)) %>%
+      # Exclude South Asians
+      filter((is.na(q24_2) | q24_2 == "No") &
+             (is.na(q24_3) | q24_3 == "No")) %>%
+      mutate(educ3 = case_when(
+               educ %in% c("No HS", "High school graduate") ~
+                 "Less than or equal HS",
+
+               educ == "Some college" ~
+                 "Some college",
+
+               educ %in% c("2-year", "4-year", "Post-grad")  ~
+                 "College Grad",
+               TRUE ~ NA_character_
+             )) %>%
+    mutate(age = 2015 - as.numeric(as.character(birthyr))) %>%
+    mutate(income = if_else(faminc == "Prefer not to say", NA, faminc),
+           income = fct_lump_min(income, 100,
+                                 other_level = ">150,000")) %>%
+    mutate(south = ifelse(
+             inputstate %in% c("Alabama", "Arkansas", "Florida",
+                               "Georgia", "Kentucky", "Louisiana",
+                               "Mississippi", "North Carolina",
+                               "South Carolina", "Tennessee", "Texas",
+                               "Virginia", "West Virginia"),
+             1, 0
+           ))
+}
+```
+
+and here is the equivalent, original code, as a series of imperative calls:
+
+```
+colnames(df) <- tolower(colnames(df))
+
+# Exclude South Asians
+df <- subset(df, (is.na(df$q24_2) | q24_2 == "No") &
+               (is.na(df$q24_3) | q24_3 == "No"))
+
+#############
+## RECODES ##
+#############
+
+## RACIAL GROUP ##
+df$race <- df$q_11rand
+levels(df$race) <- c("WHITE-BLACK", "WHITE-ASIAN", "WHITE", "BLACK", "ASIAN")
+df$race <- relevel(df$race, ref = "WHITE")
+table(df$race)
 
 
+## EDUCATION ##
+df$educ3 <- recode(as.numeric(df$educ), "2=1; 3=2; 4=2; 5=3; 6=3")
+df$educ3 <- factor(df$educ3, labels = c("Less than or equal HS", "Some College", "College Grad"))
+
+## AGE ##
+df$age <- 2015 - as.numeric(as.character(df$birthyr))
+
+
+## INCOME ##
+df$income <- ifelse(df$faminc == "Prefer not to say", NA, as.numeric(df$faminc))
+df$income <- ifelse(df$income > 11, 12, df$income)
+summary(df$income)
+
+
+## REGION ##
+southern_states <- c("Alabama", "Arkansas", "Florida", "Georgia", "Kentucky",
+                     "Louisiana", "Mississippi", "North Carolina", "South Carolina",
+                     "Tennessee", "Texas", "Virginia", "West Virginia")
+df$south <- ifelse(df$inputstate %in% southern_states, 1, 0)
+
+```
+
+The original approach, which uses an imperative style of programming, keeps
+changing the `df` object, which is the original SPSS data loaded into memory.
+The issue with this approach is that it becomes very difficult to read and
+follow as the number of operations grows. It is also impossible to easily test
+imperative code. Functions on the other hand, are very easy to test, and very
+easy to chain together. Users interested in implementation details can look into
+the source code of the function to understand how it works. If not, reading
+`basic_clean_1(dataset)` is enough to convey that some basic cleaning operations
+were applied to `dataset`. There is no need to burden the user with too much
+code all at once.
+
+The fourth target uses the output of the third target as an input and is defined
+as the output of the `closeness_2()` to function. Here again, readers that are
+interested into what `closeness_2()` does can look at its source code. If not,
+they can move on.
+
+While defining the series of operations as a list of targets improves readability,
+it is sometimes much easier to look at a visual representation of the pipeline.
+This is possible using a command from the `{targets}` package called `tar_visnetwork()`
+Here is the visual representation of the pipeline, before actually running it:
+
+```{r fig3dagbefore, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure3_dag_before", error = FALSE)
+```
+
+At a glance, it is possible to determine the following:
+
+- a single dataset is being manipulated by several functions;
+- each new instance of the dataset is the output of one, or several functions;
+- there are two functions that were defined that are not being used at all (bottom left).
+
+This is actually an interactive visualisation that opens in the users web-browser,
+so it is possible to zoom in and read the labels of the different objects.
+
+To run the pipeline, and compute all the targets, users must execute `targets::tar_make()`.
+This is how the pipeline looks like once it's been executed:
+
+```{r fig4dagbefore, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure4_dag_after", error = FALSE)
+```
+
+Each target is now updated, in other words, it has been computed. Any of the
+intermediary targets, as well as the very last target, `table_1`, can now be
+loaded into the R session in which the pipeline was executed using
+`targets::tar_load(table_1)`. Every target gets automatically saved into a
+folder that will appear after the first execution of the pipeline, called
+`_targets`. This folder contains all the targets, which means that even if I
+execute the pipeline in a completely new session the following day, the whole
+pipeline will get skipped, because all the targets have already been computed.
+This can lead to tremendous time savings. Also, if users do change some code,
+somewhere in the project, `{targets}` will automatically detect which line of
+code was changed, and what is the impact on the rest of the pipeline. For
+example, here we changed some code in one of the functions and visualise the
+pipeline:
+
+```{r fig5dagood, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure5_dag_ood", error = FALSE)
+```
+
+One function was changed, which impacted another function, which in turn impacted
+one of the intermediary datasets. Because this intermediary dataset was impacted,
+every other dataset down the pipeline will have to be recomputed up to the final
+target. Let's zoom in a bit:
+
+```{r fig6dazoom, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("./figures/figure6_dag_zoom", error = FALSE)
+```
+
+The `oneto0()` function was changed (which is a piece of code that was also
+defined as a function in the original study), but because `closeness_2()` uses
+this function internally, it was thus impacted by that change. Finally, this
+means that the output of `closeness_2()` (`multiracial_2`) is also impacted, and
+thus needs to be recomputed, impacting every other target that uses `multiracial_2`
+as an input directly or indirectly.
+
+In essence, `{targets}` forces its users to write small, well written functions
+and then chain them one after the next in order to generate an output.
+Visualising the execution of the code, and the impact that changing some pieces
+of code have on the whole pipeline helps readability immensely. Future users can
+start by looking at the `_targets.R` file, and then visualise the pipeline and
+get a high-level understanding of the whole computational process. If they want
+to read the technical implementation details of one or several functions, they
+can do so by simply going to the source code of the relevant function.
+
+One final important note to improve reproducibility of a project: the output of
+scientific research is more often than not a PDF document. We highly recommend
+using literate programming (@knuth1984literate) coupled with `{targets}` to
+produce articles. In practice this means that the paper itself will get
+generated by `{targets}` as the final output of the whole pipeline. A fairly recent,
+but already very popular engine for literate programming that also supports
+\LaTeX notation is Quarto (@Allaire_Quarto_2022).
 
 \newpage
 
 ## Conclusion
+
+- Docker for R and OS
+- renv or groundhog or PPPM for packages
+- targets for a pipeline and Quarto for Literate programming
+- mention Nix as an alternative Docker plus packages because it's always a good idea to have alternatives
 
 \newpage
 
