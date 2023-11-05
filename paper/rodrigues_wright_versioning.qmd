@@ -559,7 +559,7 @@ This is possible using a command from the `{targets}` package called `tar_visnet
 Here is the visual representation of the pipeline, before actually running it:
 
 ```{r fig3dagbefore, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure3_dag_before", error = FALSE)
+knitr::include_graphics("./figures/figure3_dag_before.png", error = FALSE)
 ```
 
 At a glance, it is possible to determine the following:
@@ -575,7 +575,7 @@ To run the pipeline, and compute all the targets, users must execute `targets::t
 This is how the pipeline looks like once it's been executed:
 
 ```{r fig4dagbefore, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure4_dag_after", error = FALSE)
+knitr::include_graphics("./figures/figure4_dag_after.png", error = FALSE)
 ```
 
 Each target is now updated, in other words, it has been computed. Any of the
@@ -593,7 +593,7 @@ example, here we changed some code in one of the functions and visualise the
 pipeline:
 
 ```{r fig5dagood, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure5_dag_ood", error = FALSE)
+knitr::include_graphics("./figures/figure5_dag_ood.png", error = FALSE)
 ```
 
 One function was changed, which impacted another function, which in turn impacted
@@ -602,7 +602,7 @@ every other dataset down the pipeline will have to be recomputed up to the final
 target. Let's zoom in a bit:
 
 ```{r fig6dazoom, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure6_dag_zoom", error = FALSE)
+knitr::include_graphics("./figures/figure6_dag_zoom.png", error = FALSE)
 ```
 
 The `oneto0()` function was changed (which is a piece of code that was also
