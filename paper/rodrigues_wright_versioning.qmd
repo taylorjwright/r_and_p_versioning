@@ -636,6 +636,7 @@ but already very popular engine for literate programming that also supports
 - Docker for R and OS
 - renv or groundhog or PPPM for packages
 - targets for a pipeline and Quarto for Literate programming
+- importantly: what’s the very minimum you should do to make your project reproducible? the bare minimum
 - mention Nix as an alternative Docker plus packages because it's always a good idea to have alternatives
 
 \newpage
