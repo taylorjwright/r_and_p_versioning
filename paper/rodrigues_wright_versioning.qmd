@@ -37,14 +37,14 @@ library(flextable)
 ## Introduction
 
 Beginning in the early 2010s with psychology and quickly spilling over into
-political science and economics on the backs of high profile cases of fraud
+political science and economics on the backs of high-profile cases of fraud
 (@broockman2015irregularities) and errors (@herndon2014does), the "replication
 crisis" in the social sciences has become mainstream, even finding its way into
 the popular press (@aschwanden2015, @gelman2018). Concerns over how well
-published results hold up to replication in other settings has lead to large
+published results hold up to replication in other settings has led to large
 scale initiatives to document how trustworthy the existing stock of evidence is
 (e.g. @camerer2016evaluating, @chang2022replicable, and @open2015estimating).
-While the *replicability* of studies has recieved much attention, there has been
+While the *replicability* of studies has received much attention, there has been
 a tandem movement discussing the importance of and need for research
 *reproducibility*. While the exact scope and definition is subject to ongoing
 debate, replication is, broadly speaking, re-testing a hypothesis while changing
@@ -71,11 +71,11 @@ Statement which was signed by editors of 27 leading political science journals:
 Specifically, the provision and publication of underlying data and code used for
 data preparation and analysis. This push has seen some success, with a growing
 number journals now requiring the provision of replication materials as a
-condition of publication. Some journals, such as the American Econonmic Review
+condition of publication. Some journals, such as the American Economic Review
 (AER) or American Journal of Political Science (AJPS), even have verification
-policies that require authors upload their replication materials and have their
+policies that require authors to upload their replication materials and have their
 results verified by another team (either the journal's replication team (AER) or
-a third party, (AJPS)) prior to publication. However, even if these materials
+a third party, (AJPS)) before publication. However, even if these materials
 are provided, and even when in place these policies do not have perfect
 compliance (@philip2010report, @stockemer2018data), regular software updates and
 new version releases can result in the replication materials failing to
@@ -83,9 +83,9 @@ faithfully reproduce the authors' results or even run at all.
 ^[@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R}
 changes that could break scripts.]
 
-In this paper we present a case study of an article published in Journal of
+In this paper, we present a case study of an article published in Journal of
 Politics in January 2022 titled, ``Multiracial Identity and Political
-Preferences'', @davenport2022multiracial, that details that replication
+Preferences'', @davenport2022multiracial, that details replication
 challenges arising from changes in the statistical software \texttt{R}. We were
 unable to reproduce the authors' results using either the current version of
 \texttt{R}, or the version that the authors indicate they used. The lack of
@@ -93,14 +93,21 @@ reproducibility arose due to a change in the defaults used by base \texttt{R}
 when generating random numbers starting in version 3.6.0.
 
 We contribute to the existing literature in three ways. 
-First, we add to the discussion of importance of availablility of replication materials. 
-Existing research documents that the availability of replication materials is associated with a higher citation count (@stockemer2018data, is this reference true?) and with a higher likelihood of replication (@philip2010report). 
-Much of this research focuses on the provision of data and code as a necessary condition for facilitating replication and rebuilding trust in science (), while  .
-Contribution 1: A necessary but insufficient condition 
-Strand 2: Discussion of problems raised by software and package versioning for reproducibility
-Contribution 2: A walk through of the problem with a concrete example
-Strand 3: Discussion of tools and best practices for ensuring reproducibility
-Contribution 3: Step-by-step guide to using Docker, {renv}, and {targets} to ensure reproducibility
+First, we add to the discussion about the importance of the availability of 
+replication materials. Existing research documents that the availability of 
+replication materials is associated with a higher citation count 
+(@stockemer2018data, is this reference true?) and with a higher likelihood of 
+replication (@philip2010report). Much of this research focuses on the provision 
+of data and code as a necessary condition for facilitating replication and 
+rebuilding trust in science (). We contribute to this literature by emphasizing 
+that, while we agree that data and code availability are necessary, their 
+existence cannot guarantee reproducibility. This brings us to our second 
+contribution: we expand on the discussion of problems raised by software and 
+package versioning for reproducibility by providing a walkthrough of the problem
+using a concrete example. Lastly, we further the discussion of tools and best 
+practices for ensuring reproducibility. Specifically, we provide a step-by-step 
+guide to using Docker, {renv}, and {targets} to ensure the reproducibility of 
+research.
 
 The rest of the article proceeds as follows: Section 2 walks through the
 reproducibility issues in @davenport2022multiracial; Section 3 discusses
