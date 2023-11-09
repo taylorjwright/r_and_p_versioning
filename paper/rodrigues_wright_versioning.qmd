@@ -92,8 +92,10 @@ unable to reproduce the authors' results using either the current version of
 reproducibility arose due to a change in the defaults used by base \texttt{R}
 when generating random numbers starting in version 3.6.0.
 
-We contribute to the existing literature... 
-Strand 1: Discussion of importance of availablility of replication/reproducibility materials
+We contribute to the existing literature in three ways. 
+First, we add to the discussion of importance of availablility of replication materials. 
+Existing research documents that the availability of replication materials is associated with a higher citation count (@stockemer2018data, is this reference true?) and with a higher likelihood of replication (@philip2010report). 
+Much of this research focuses on the provision of data and code as a necessary condition for facilitating replication and rebuilding trust in science (), while  .
 Contribution 1: A necessary but insufficient condition 
 Strand 2: Discussion of problems raised by software and package versioning for reproducibility
 Contribution 2: A walk through of the problem with a concrete example
