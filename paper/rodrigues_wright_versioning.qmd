@@ -36,21 +36,61 @@ library(flextable)
 
 ## Introduction
 
-Beginning in the early 2010s with psychology and quickly spilling over into political science and economics on the backs of high profile cases of fraud (@broockman2015irregularities) and errors (@herndon2014does), the "replication crisis" in the social sciences has become mainstream, even finding its way into the popular press (@aschwanden2015, @gelman2018). 
-Concerns over how well published results hold up to replication in other settings has lead to large scale initiatives to document how trustworthy the existing stock of evidence is (e.g. @camerer2016evaluating, @chang2022replicable, and @open2015estimating). 
-While the *replicability* of studies has recieved much attention, there has been a tandem movement discussing the importance of and need for research *reproducibility*. 
-While the exact scope and definition is subject to ongoing debate, replication is, broadly speaking, re-testing a hypothesis while changing an element of previous research (e.g. the sample or estimating equation) whereas reproducibility (sometimes referred to as verification or computational reproducibility) is following a study's protocol or methods exactly and obtaining the results presented in the study.^[For further discussion on definitions, scopes, and types of replication and reproducibility see, for example, @clemens2017meaning, @derksen2022kinds, @hamermesh2007replication, and @nosek2020replication.] 
-In our view, reproducibility is an insufficient but necessary condition for replication---that is, work cannot be replicable if it is not reproducible and it likely does not make sense to spend resources on replication if research is not in the first place reproducible.   
+Beginning in the early 2010s with psychology and quickly spilling over into
+political science and economics on the backs of high profile cases of fraud
+(@broockman2015irregularities) and errors (@herndon2014does), the "replication
+crisis" in the social sciences has become mainstream, even finding its way into
+the popular press (@aschwanden2015, @gelman2018). Concerns over how well
+published results hold up to replication in other settings has lead to large
+scale initiatives to document how trustworthy the existing stock of evidence is
+(e.g. @camerer2016evaluating, @chang2022replicable, and @open2015estimating).
+While the *replicability* of studies has recieved much attention, there has been
+a tandem movement discussing the importance of and need for research
+*reproducibility*. While the exact scope and definition is subject to ongoing
+debate, replication is, broadly speaking, re-testing a hypothesis while changing
+an element of previous research (e.g. the sample or estimating equation) whereas
+reproducibility (sometimes referred to as verification or computational
+reproducibility) is following a study's protocol or methods exactly and
+obtaining the results presented in the study.^[For further discussion on
+definitions, scopes, and types of replication and reproducibility see, for
+example, @clemens2017meaning, @derksen2022kinds, @hamermesh2007replication, and
+@nosek2020replication.]
 
-These concerns about the reproducibility (and replicability) of social science research have prompted a push, often referred to as Data Access and Research Transparency (DA-RT) in political science following @lupia2014openness, for journals to require the publication of research materials that accompany academic research.^[See, for example, the 2014 Joint Editors Transparency Statement which was signed by editors of 27 leading political science journals: \url{https://www.dartstatement.org/2014-journal-editors-statement-jets}] 
-Specifically, the provision and publication of underlying data and code used for data preparation and analysis. 
-This push has seen some success, with a growing number journals now requiring the provision of replication materials as a condition of publication.
-Some journals, such as the American Econonmic Review (AER) or American Journal of Political Science (AJPS), even have verification policies that require authors upload their replication materials and have their results verified by another team (either the journal's replication team (AER) or a third party, (AJPS)) prior to publication.
-However, even if these materials are provided, and even when in place these policies do not have perfect compliance (@philip2010report, @stockemer2018data), regular software updates and new version releases can result in the replication materials failing to faithfully reproduce the authors' results or even run at all. ^[@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R} changes that could break scripts.]
+In our view, reproducibility is an insufficient but necessary condition for
+replication---that is, work cannot be replicable if it is not reproducible and
+it likely does not make sense to spend resources on replication if research is
+not in the first place reproducible.
 
-In this paper we present a case study of an article published in Journal of Politics in January 2022 titled, ``Multiracial Identity and Political Preferences'', @davenport2022multiracial, that details that replication challenges arising from changes in the statistical software \texttt{R}. 
-We were unable to reproduce the authors' results using either the current version of \texttt{R}, or the version that the authors indicate they used.
-The lack of reproducibility arose due to a change in the defaults used by base \texttt{R} when generating random numbers starting in version 3.6.0.
+These concerns about the reproducibility (and replicability) of social science
+research have prompted a push, often referred to as Data Access and Research
+Transparency (DA-RT) in political science following @lupia2014openness, for
+journals to require the publication of research materials that accompany
+academic research.^[See, for example, the 2014 Joint Editors Transparency
+Statement which was signed by editors of 27 leading political science journals:
+\url{https://www.dartstatement.org/2014-journal-editors-statement-jets}]
+Specifically, the provision and publication of underlying data and code used for
+data preparation and analysis. This push has seen some success, with a growing
+number journals now requiring the provision of replication materials as a
+condition of publication. Some journals, such as the American Econonmic Review
+(AER) or American Journal of Political Science (AJPS), even have verification
+policies that require authors upload their replication materials and have their
+results verified by another team (either the journal's replication team (AER) or
+a third party, (AJPS)) prior to publication. However, even if these materials
+are provided, and even when in place these policies do not have perfect
+compliance (@philip2010report, @stockemer2018data), regular software updates and
+new version releases can result in the replication materials failing to
+faithfully reproduce the authors' results or even run at all.
+^[@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R}
+changes that could break scripts.]
+
+In this paper we present a case study of an article published in Journal of
+Politics in January 2022 titled, ``Multiracial Identity and Political
+Preferences'', @davenport2022multiracial, that details that replication
+challenges arising from changes in the statistical software \texttt{R}. We were
+unable to reproduce the authors' results using either the current version of
+\texttt{R}, or the version that the authors indicate they used. The lack of
+reproducibility arose due to a change in the defaults used by base \texttt{R}
+when generating random numbers starting in version 3.6.0.
 
 We contribute to the existing literature... 
 Strand 1: Discussion of importance of availablility of replication/reproducibility materials
@@ -60,7 +100,12 @@ Contribution 2: A walk through of the problem with a concrete example
 Strand 3: Discussion of tools and best practices for ensuring reproducibility
 Contribution 3: Step-by-step guide to using Docker, {renv}, and {targets} to ensure reproducibility
 
-The rest of the article proceeds as follows: Section 2 walks through the reproducibility issues in @davenport2022multiracial; Section 3 discusses currently available tools and best practices (e.g. Docker and \texttt{R} packages such as \texttt{renv}, \texttt{groundhog}) for ensuring that replication materials continue to faithfully reproduce research results, despite post-publication changes in the tools used; and Section 4 concludes.
+The rest of the article proceeds as follows: Section 2 walks through the
+reproducibility issues in @davenport2022multiracial; Section 3 discusses
+currently available tools and best practices (e.g. Docker and \texttt{R}
+packages such as \texttt{renv}, \texttt{groundhog}) for ensuring that
+replication materials continue to faithfully reproduce research results, despite
+post-publication changes in the tools used; and Section 4 concludes.
 
 \newpage
 
@@ -97,7 +142,13 @@ knitr::include_graphics("./figures/figure1_prechange.png", error = FALSE)
 knitr::include_graphics("./figures/figure2_prechange.png", error = FALSE)
 ```
 
-The authors note that they use R version 3.6.2. Issue seems to be the weights the authors use are non-integer and Zelig uses sample() in that case which following changes to base R yields different results in 3.6.x and 3.5.x (see http://docs.zeligproject.org/articles/weights.html). Prior to R 3.6.x RNGkind(sample.kind = "Rounding") was the default behaviour but after 3.6.0 the sample function's new default behaviour is RNGkind(sample.kind = "Rejection") (see https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html). 
+The authors note that they use R version 3.6.2. Issue seems to be the weights
+the authors use are non-integer and Zelig uses sample() in that case which
+following changes to base R yields different results in 3.6.x and 3.5.x (see
+http://docs.zeligproject.org/articles/weights.html). Prior to R 3.6.x
+RNGkind(sample.kind = "Rounding") was the default behaviour but after 3.6.0 the
+sample function's new default behaviour is RNGkind(sample.kind = "Rejection")
+(see https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html).
 
 Soemthing about how there are ways to ensure that the estimates are consistent (changing the weights to integers or setting the RNGkind to be backwards compatible) but documenting the correct version of R used in the analysis is probably the easiest way. Segue into...
 
@@ -105,95 +156,42 @@ Soemthing about how there are ways to ensure that the estimates are consistent (
 
 ## Discussion
 
-### The problem is the seed?
-
-The table below shows the quantiles of the means obtained from 100 runs with 
-100 different random seeds on R version 3.5 for the `m2m` models. We should
-check where the coefficients from the original paper fall in that distribution,
-and see if coefficients should vary so much simply from changing the seed?
-
-```{r echo = FALSE, message = FALSE}
-simulations_m2m_paths <- list.files("../docker/version_3.x_many_seeds/original/shared_folder/", pattern = "m2m.*3_5.*\\d{1,}.rds", full.names = TRUE)
-
-simulations_m2m <- tibble(paths = simulations_m2m_paths) %>%
-  mutate(datasets = map(paths, readRDS),
-         paths = str_extract(paths, "\\d{1,}.rds")) %>%
-  unnest(cols = c(datasets))
-
-simulations_m2m %>%
-  group_by(race, model) %>%
-  summarise(
-    q_05_mean = round(quantile(mean, probs = 0.05), 2),
-    q_20_mean = round(quantile(mean, probs = 0.2), 2),
-    q_40_mean = round(quantile(mean, probs = 0.4), 2),
-    q_50_mean = round(quantile(mean, probs = 0.5), 2),
-    q_60_mean = round(quantile(mean, probs = 0.6), 2),
-    q_80_mean = round(quantile(mean, probs = 0.8), 2),
-    q_95_mean = round(quantile(mean, probs = 0.95), 2)
-  ) %>%
-  flextable()
-```
-
-The table below shows the quantiles of the means obtained from 100 runs with 
-100 different random seeds on R version 3.5 for the `m2w` models:
-
-```{r echo = FALSE, message = FALSE}
-simulations_m2w_paths <- list.files("../docker/version_3.x_many_seeds/original/shared_folder/", pattern = "m2w.*3_5.*\\d{1,}.rds", full.names = TRUE)
-
-simulations_m2w <- tibble(paths = simulations_m2w_paths) %>%
-  mutate(datasets = map(paths, readRDS),
-         paths = str_extract(paths, "\\d{1,}.rds")) %>%
-  unnest(cols = c(datasets))
-
-simulations_m2w %>%
-  group_by(race, model) %>%
-  summarise(
-    q_05_mean = round(quantile(mean, probs = 0.05), 2),
-    q_20_mean = round(quantile(mean, probs = 0.2), 2),
-    q_40_mean = round(quantile(mean, probs = 0.4), 2),
-    q_50_mean = round(quantile(mean, probs = 0.5), 2),
-    q_60_mean = round(quantile(mean, probs = 0.6), 2),
-    q_80_mean = round(quantile(mean, probs = 0.8), 2),
-    q_95_mean = round(quantile(mean, probs = 0.95), 2)
-  ) %>%
-  flextable()
-
-```
-
 ### Rebuilding the original development environment using Docker
 
 Replicating results from past studies is quite challenging, for many reasons.
 This article focuses on one of these reasons: results cannot be reproduced
 because of changes introduced in more recent versions of the software used for
-analysis, despite the availability of both data and replication scripts.
+analysis, despite the availability of both data and the authors’ original
+scripts.
 
-To replicate the results from the original study and to pinpoint the impact of
+To reproduce the results from the original study and to pinpoint the impact of
 the change introduced in R 3.6.0, we chose to use Docker. Docker is a
 containerization tool which enables one to build so-called *images*. These
-images contain a software product alongside its dependencies and even pieces of
-a Linux operating system. To use the software product, customers in turn only
-need to be able to run Docker *containers* instantiated from the image
-definition. Containerization tools such as Docker solved the "works on my
-machine" problem: this problem arises when software that works well on the
-development machine of the developer fails to run successfully on a customer's
-machine. This usually happens because the customer's computer does not have the
-necessary dependencies to run the software (which are traditionally not shipped
-alongside the software product) or because of version mismatch of the operating
-system.
+images are usually built on top of a Linux operating system and contain all of
+the required software to build any type of output. After the image containing
+the output has been built, users in turn only need to be able to run Docker
+*containers* instantiated from the image definition in order to run the output.
+Containerization tools such as Docker solved the "works on my machine" problem:
+this problem arises when software that works well on the development machine of
+the developer fails to run successfully on a customer's machine. This usually
+happens because the customer's computer does not have the necessary dependencies
+to run the software (which are traditionally not shipped alongside the software
+product) or because of version mismatch of the operating system.
 
-A research project can also be seen as a *software product*, and suffers thus
+The same approach can be used to build research projects, which also suffer
 from the same "works on my machine" problem as any other type of software.
 Containerization tools offer a great opportunity for reproducibility in
 research: instead of just sharing a replication script, authors can now easily
 share the right version of the software used to produce these scripts, as well
 as the right version of the used libraries by building and sharing a Docker
 image (or at least provide the necessary blueprint to enable others to do so, as
-we will discuss below). Future researchers looking to replicate the results can
+we will discuss below). Future researchers looking to reproduce the results can
 now simple run a container from the provided image (or build an image themselves
 if the original authors provided the required blueprints).
 
-Concretely, to build a Docker image, a researcher writes a so-called *Dockerfile*.
-Here is an example of a very simple Dockerfile:
+Concretely, to build a Docker image, a researcher writes a so-called
+*Dockerfile*, which lists all the necessary steps to build an output. Here is an
+example of a very simple Dockerfile:
 
 ```
 FROM rocker/r-ver:4.3.0
@@ -207,8 +205,13 @@ image. The Rocker project is a repository containing many images that ship
 different versions of R and packages pre-installed: so the image called
 `r-ver:4.3.0` is an image that ships R version 4.3.0. The last line states which
 command should run when the user runs a container defined from our image, so in
-this case, simply the R interactive prompt. Below is an example of a Dockerfile
-that runs an analysis script:
+this case, simply the R interactive prompt. Concretely, the above image would
+allow someone to run R version 4.3.0 as a container, completely isolated from
+the rest of their computer. This allows users to run different versions of R on
+the same system. We can add more commands in order to run a complete research
+project, from start to finish. Below is an example of a Dockerfile that runs an
+analysis script, by first stating which base image is going to be used, and then
+adding packages, files and data to run the entire project:
 
 ```
 FROM rocker/r-ver:4.3.0
@@ -217,11 +220,15 @@ RUN R -e "install.packages('dplyr')"
 
 RUN mkdir /home/research_project
 
+RUN mkdir /home/research_project/data
+
 RUN mkdir /home/research_project/project_output
 
 RUN mkdir /home/research_project/shared_folder
 
 COPY analyse_data.R /home/research_project/analyse_data.R
+
+COPY dataset.csv /home/research_project/dataset.csv
 
 RUN cd /home/research_project && R -e "source('analyse_data.R')"
 
@@ -236,22 +243,23 @@ data manipulation and it creates three directories:
 - `/home/research_project/project_output`
 - `/home/research_project/shared_folder`.
 
-Then, it copies the `analyse_data.R` script, which contains the actual analysis
-made for the purposes of the research project, into the Docker image. The
-second-to-last line runs the script, and the last line moves the outputs
-generated from running the `analyse_data.R` script to a folder called
-`shared_folder`. It is important to say that `RUN` statements will be executed
-as the image gets built, and `CMD` statements will be executed as a container
-runs. Using this Dockerfile, an image called `research_project` can be built
-with the following command:
+Then, it copies the `analyse_data.R` script , which contains the actual analysis
+made for the purposes of the research project, and the `dataset.csv` file, into
+the Docker image. The second-to-last line runs the script, and the last line
+moves the outputs generated from running the `analyse_data.R` script to a folder
+called `shared_folder`. It is important to say that `RUN` statements will be
+executed as the image gets built, and `CMD` statements will be executed as a
+container runs. Using this Dockerfile, an image called `research_project` can be
+built with the following command:
 
 ```
 docker build -t research_project .
 ```
 
-This image can then be archived and shared for replication purposes. Future
-researchers can then run a container from that image using a command
-such as:
+This image can then be archived and shared for replication purposes. Other
+images can be built on top of this one, and will thus contain R version 4.3.0,
+the `{dplyr}` package, the data and the project’s folder structure. Future
+researchers can also run a container from that image using a command such as:
 
 ```
 docker run -d -it --rm --name research_project_container \
@@ -268,8 +276,8 @@ the container can now be accessed from the host's computer.
 The image built by the process above is immutable: so as long as users can run
 it, the outputs produced will be exactly the same as when the original author
 ran the original analysis. However, if the image gets lost, and needs to be
-rebuilt, the above Dockerfile will not generate the same image. This is because
-the Dockerfile, as it is written above, will download the version of `{dplyr}`
+rebuilt, the above `Dockerfile` will not generate the same image. This is because
+the `Dockerfile`, as it is written above, will download the version of `{dplyr}`
 that is current at the time it gets built. So if a user instead builds the image
 in 5 years, the version of `{dplyr}` that will get downloaded will not be the
 same as the one that was actually used for the original analysis. The version of
@@ -285,8 +293,6 @@ simply needs to call:
 
 ```{r, eval = FALSE}
 renv::init()
-renv::hydrate()
-renv::snapshot()
 ```
 
 to generate a file called `renv.lock`. This file contains the R version that was
