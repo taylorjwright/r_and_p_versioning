@@ -632,7 +632,7 @@ so it is possible to zoom in and read the labels of the different objects.
 To run the pipeline, and compute all the targets, users must execute `targets::tar_make()`.
 This is how the pipeline looks like once it's been executed:
 
-![Every output has now been computed. \label{fig_dag_after}](./figures/figure3_dag_after.png)
+![Every output has now been computed. \label{fig_dag_after}](./figures/figure4_dag_after.png)
 
 Each target is now updated, in other words, it has been computed. Any of the
 intermediary targets, as well as the very last target, `table_1`, can now be
@@ -655,7 +655,7 @@ one of the intermediary datasets. Because this intermediary dataset was impacted
 every other dataset down the pipeline will have to be recomputed up to the final
 target. Let's zoom in a bit:
 
-![The graph opens in your web browser, and it is possible to zoom in. \label{fig_dag_zoom}](./figures/figure3_dag_zoom.png)
+![The graph opens in your web browser, and it is possible to zoom in. \label{fig_dag_zoom}](./figures/figure5_dag_zoom.png)
 
 The `oneto0()` function was changed (which is a piece of code that was also
 defined as a function in the original study), but because `closeness_2()` uses
