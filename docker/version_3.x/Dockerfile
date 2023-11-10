@@ -1,4 +1,4 @@
-FROM rhub/rig:latest
+FROM rhub/rig@sha256:0667321839be0c2ade5c14fd8c8bbb311a843ddf690081c5d0dd80dcc98bd6c6
 
 RUN rig install 3.5.0
 
