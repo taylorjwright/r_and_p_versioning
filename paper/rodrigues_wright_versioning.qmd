@@ -648,14 +648,14 @@ code was changed, and what is the impact on the rest of the pipeline. For
 example, here we changed some code in one of the functions and visualise the
 pipeline:
 
-![We can now see that one of the outputs is out of date. \label{fig_dag_ood}](./figures/figure3_dag_ood.png)
+![We can now see that one of the outputs is out of date. \label{fig_dag_ood}](./figures/figure5_dag_ood.png)
 
 One function was changed, which impacted another function, which in turn impacted
 one of the intermediary datasets. Because this intermediary dataset was impacted,
 every other dataset down the pipeline will have to be recomputed up to the final
 target. Let's zoom in a bit:
 
-![The graph opens in your web browser, and it is possible to zoom in. \label{fig_dag_zoom}](./figures/figure5_dag_zoom.png)
+![The graph opens in your web browser, and it is possible to zoom in. \label{fig_dag_zoom}](./figures/figure6_dag_zoom.png)
 
 The `oneto0()` function was changed (which is a piece of code that was also
 defined as a function in the original study), but because `closeness_2()` uses
