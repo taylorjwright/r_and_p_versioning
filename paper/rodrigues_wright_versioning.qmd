@@ -618,9 +618,7 @@ it is sometimes much easier to look at a visual representation of the pipeline.
 This is possible using a command from the `{targets}` package called `tar_visnetwork()`
 Here is the visual representation of the pipeline, before actually running it:
 
-```{r fig3dagbefore, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure3_dag_before.png", error = FALSE)
-```
+![A visual representation of the pipeline. No output has been computed yet \label{dfifig3}](./figures/figure3_dag_before.png)
 
 At a glance, it is possible to determine the following:
 
