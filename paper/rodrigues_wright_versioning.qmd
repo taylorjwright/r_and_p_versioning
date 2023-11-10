@@ -618,7 +618,7 @@ it is sometimes much easier to look at a visual representation of the pipeline.
 This is possible using a command from the `{targets}` package called `tar_visnetwork()`
 Here is the visual representation of the pipeline, before actually running it:
 
-![A visual representation of the pipeline. No output has been computed yet \label{dfifig3}](./figures/figure3_dag_before.png)
+![A visual representation of the pipeline. No output has been computed yet. \label{fig_dag_before}](./figures/figure3_dag_before.png)
 
 At a glance, it is possible to determine the following:
 
@@ -632,9 +632,7 @@ so it is possible to zoom in and read the labels of the different objects.
 To run the pipeline, and compute all the targets, users must execute `targets::tar_make()`.
 This is how the pipeline looks like once it's been executed:
 
-```{r fig4dagbefore, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure4_dag_after.png", error = FALSE)
-```
+![Every output has now been computed. \label{fig_dag_after}](./figures/figure3_dag_after.png)
 
 Each target is now updated, in other words, it has been computed. Any of the
 intermediary targets, as well as the very last target, `table_1`, can now be
@@ -650,18 +648,14 @@ code was changed, and what is the impact on the rest of the pipeline. For
 example, here we changed some code in one of the functions and visualise the
 pipeline:
 
-```{r fig5dagood, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure5_dag_ood.png", error = FALSE)
-```
+![We can now see that one of the outputs is out of date. \label{fig_dag_ood}](./figures/figure3_dag_ood.png)
 
 One function was changed, which impacted another function, which in turn impacted
 one of the intermediary datasets. Because this intermediary dataset was impacted,
 every other dataset down the pipeline will have to be recomputed up to the final
 target. Let's zoom in a bit:
 
-```{r fig6dazoom, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure6_dag_zoom.png", error = FALSE)
-```
+![The graph opens in your web browser, and it is possible to zoom in. \label{fig_dag_zoom}](./figures/figure3_dag_zoom.png)
 
 The `oneto0()` function was changed (which is a piece of code that was also
 defined as a function in the original study), but because `closeness_2()` uses
