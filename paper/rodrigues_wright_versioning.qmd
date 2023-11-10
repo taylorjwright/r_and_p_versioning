@@ -75,7 +75,7 @@ condition of publication. Some journals, such as the American Economic Review
 (AER) or American Journal of Political Science (AJPS), even have verification
 policies that require authors to upload their replication materials and have their
 results verified by another team (either the journal's replication team (AER) or
-a third party, (AJPS)) before publication. However, even if these materials
+a third party (AJPS)) before publication. However, even if these materials
 are provided, and even when in place these policies do not have perfect
 compliance (@philip2010report, @stockemer2018data), regular software updates and
 new version releases can result in the replication materials failing to
@@ -121,45 +121,90 @@ post-publication changes in the tools used; and Section 4 concludes.
 ## Reproduction
 
 ### Illustrating the issue with software versioning 
-A key thing here is that I don't think we want to be too hostile sounding towards these authors, they had readme files and reproducibility materials available. It's just that manual entry human-error hobgoblins got them with the R versioning.
+@davenport2022multiracial examine the political ideology and policy preferences 
+of multiracial Americans (those who identify with more than one racial group). 
+This section of Americans is growing rapidly, but little is known about their
+politics. The authors survey White-Asians and White-Blacks from YouGov's Internet 
+panel and compare them to similarly surveyed White, Black, and Asian monoracial 
+respondents, looking for differences in political ideology; party affiliation;  
+positions about cultural issues, social welfare, and police treatment across 
+racial groups.
 
-- Brief discussion of authors' paper and context
-- The results of their code using stated software version in documentation (just screenshot right now)
-```{r fig1screenshot, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure1_screenshot.png", error = FALSE)
-```
+![Figure 1 from @davenport2022multiracial. Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{dfifig1}](./figures/figure1_screenshot.png)
 
-```{r fig2screenshot, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure2_screenshot.png", error = FALSE)
-```
-- The results of their code using later software version (post 3.6.0)
+![Figure 2 from @davenport2022multiracial. Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{dfifig2}](./figures/figure2_screenshot.png)
 
-```{r fig1post, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure1_postchange.png", error = FALSE)
-```
+Figures \ref{dfifig1} and \ref{dfifig2} present Figures 1 and 2 from
+@davenport2022multiracial which contain the main results. Panel A corresponds to 
+results for White-Asian respondents while panel B corresponds to White-Black 
+respondents. In Figure \ref{dfifig1}, the x-axis reflects the differences in a given 
+multiracial group's attitudes relative to the corresponding monoracial group 
+(e.g. White-Asian relative to Asians) with higher values meaning more liberal 
+attitudes. In Figure \ref{dfifig2}, the x-axis reflects a similar difference but relative
+to monoracial Whites (e.g. White-Asian relative to Whites). 
+Figure 1 indicates that White-Asians have more liberal attitudes on cultural issues
+than Asians while White-Blacks have more liberal attitudes on cultural issues 
+than Blacks but views regarding social welfare and police perception appear to 
+be comparable between White-Asians and Asians and between White-Blacks and Blacks. 
+Figure 2 Panel A suggests that White-Asians are more liberal than Whites when it 
+comes to cultural issues and police perceptions but similarly liberal with views 
+on social welfare. Figure 2 Panel B indicates that White-Blacks are similarly 
+liberal to Whites on cultural issues but are more liberal on issues of social 
+welfare and police perceptions. 
 
-```{r fig2post, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure2_postchange.png", error = FALSE)
-```
-- Results of their code using earlier software version (pre 3.6.0)
-```{r fig1pre, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("./figures/figure1_prechange.png", error = FALSE)
-```
+Importantly, the authors provide replication materials at the Journal of Politics 
+Dataverse, including the code used to conduct their analysis as well as the data 
+itself. The code files contain comments noting that the analysis "Requires R 
+version 3.6.2 (2019-12-12)".
 
-```{r fig2pre, echo=FALSE, out.width = '100%'}
-# need to tweak axes to match authors, CI cap is truncated
-knitr::include_graphics("./figures/figure2_prechange.png", error = FALSE)
-```
+![Figure 1 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig1}](./figures/figure1_postchange.png)
 
-The authors note that they use R version 3.6.2. Issue seems to be the weights
-the authors use are non-integer and Zelig uses sample() in that case which
-following changes to base R yields different results in 3.6.x and 3.5.x (see
-http://docs.zeligproject.org/articles/weights.html). Prior to R 3.6.x
-RNGkind(sample.kind = "Rounding") was the default behaviour but after 3.6.0 the
-sample function's new default behaviour is RNGkind(sample.kind = "Rejection")
-(see https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html).
+![Figure 2 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig2}](./figures/figure2_postchange.png)
 
-Soemthing about how there are ways to ensure that the estimates are consistent (changing the weights to integers or setting the RNGkind to be backwards compatible) but documenting the correct version of R used in the analysis is probably the easiest way. Segue into...
+Figures \ref{postfig1} and \ref{postfig2} present Figures 1 and 2 from 
+@davenport2022multiracial when using a later software version (specifically a 
+version of R post 3.6.0 such as the version 3.6.2 that the authors note in their 
+code files). In Panel A of Figures \ref{postfig1} and \ref{postfig2}, 
+White-Asians are now more liberal than Asians and Whites on all issues. In Panel 
+B of \ref{postfig1} White-Blacks have more liberal views on cultural issues than 
+Blacks (in terms of point estimates though the confidence interval now contains 0) 
+and are now more liberal regarding police perceptions. In Panel B of \ref{postfig2} 
+the point estimates appear very similar though there is an issue computing 
+confidence intervals.
+
+
+![Figure 1 from @davenport2022multiracial when using an earlier software version (R pre 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{prefig1}](./figures/figure1_prechange.png)
+
+![Figure 2 from @davenport2022multiracial when using an earlier software version (R pre 3.6.0). Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{prefig2}](./figures/figure2_prechange.png)
+
+Figures \ref{postfig1} and \ref{postfig2} provide Figures 1 and 2 from 
+@davenport2022multiracial when using an earlier software version (specifically a 
+version of R pre 3.6.0). Minor issues with the confidence intervals in Panel B of
+Figure \ref{prefig2} aside, these are otherwise the same as those presented in
+the published article. 
+
+The issue seems to be that the weights the authors use are non-integer and the 
+main function used in their analysis, Zelig, uses sample() in cases with 
+non-integer values (see
+http://docs.zeligproject.org/articles/weights.html). Following changes to base R 
+in 3.6.x, the sample() function and thus now Zelig, yields different results in 
+R versions later than 3.5.x. Before R 3.6.0 RNGkind(sample.kind = "Rounding") 
+was the default behaviour but after 3.6.0 the sample function's new default 
+behaviour is RNGkind(sample.kind = "Rejection") (see 
+https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html for 
+more details).
+
+The key takeaway is that despite the authors providing replication materials and
+indicating which version of R they believed they used, the results cannot be 
+reproduced. This is not a criticism of the authors, but rather a demonstration
+of the challenges of reproducibility in the face of software updates. There are 
+ways to ensure that the estimates are consistent (such as ensuring to always 
+explicitly articulate options in functions so that changes to defaults cannot break
+existing code. However, reproducibility is still threatened by software updates 
+that result in larger changes (such as what inputs are required). Manually documenting 
+software versions (including packages or commands) in the code or README files 
+is a good start, but as our example shows, it is not enough to ensure faithful
+reproduction. 
 
 \newpage
 
