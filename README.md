@@ -1,7 +1,7 @@
 # r_and_p_versioning
 Repository for paper "Replication materials are great but software versioning still poses a problem for open science"
 
-The paper is rendered at each push to `main`. The rendered paper can be found in the `targets-runs` branch in the `rendered_paper` folder.
+The paper is rendered at each push to `main`. The rendered paper can be found in the `targets-runs` branch in the `rendered_pdf` folder.
 
 ## Reproducing the results from the original paper
 
