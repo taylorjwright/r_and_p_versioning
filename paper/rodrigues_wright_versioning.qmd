@@ -20,6 +20,7 @@ header-includes:
 \author{Taylor J. Wright\thanks{Brock University, \href{mailto:twright3@brocku.ca}{twright3@brocku.ca}} \and Bruno Rodrigues \thanks{Ministry of Research and Higher education, Luxembourg}
 }
 
+\maketitle
 \singlespacing
 \begin{abstract}
 The growing concern regarding reproducibility and replicability of social science 
@@ -33,6 +34,8 @@ discuss the tools and techniques researchers can use to ensure that their resear
 remains reproducible despite changes in the software used.
 \end{abstract}
 
+\doublespacing
+
 ```{r, echo=FALSE, include=FALSE}
 library(knitr)
 library(dplyr)
@@ -42,8 +45,6 @@ library(purrr)
 library(ggplot2)
 library(flextable)
 ```
-
-\maketitle
 
 \newpage
 
