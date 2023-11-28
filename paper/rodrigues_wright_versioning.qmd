@@ -5,8 +5,8 @@ format:
     number-sections: true
 geometry: margin = 1.0in
 font-size: 11pt
-mainfont: cochineal
-sansfont: "TeX Gyre Heros"
+# mainfont: cochineal
+# sansfont: "TeX Gyre Heros"
 header-includes:
   \usepackage{booktabs}
   \usepackage{setspace}
@@ -220,17 +220,17 @@ scripts.
 
 To reproduce the results from the original study and to pinpoint the impact of
 the change introduced in R 3.6.0, we chose to use Docker. Docker is a
-containerization tool which enables one to build so-called *images*. These
+containerization tool that enables one to build so-called *images*. These
 images are usually built on top of a Linux operating system and contain all of
 the required software to build any type of output. After the image containing
 the output has been built, users in turn only need to be able to run Docker
-*containers* instantiated from the image definition in order to run the output.
+*containers* instantiated from the image definition to run the output.
 Containerization tools such as Docker solved the "works on my machine" problem:
 this problem arises when software that works well on the development machine of
 the developer fails to run successfully on a customer's machine. This usually
 happens because the customer's computer does not have the necessary dependencies
 to run the software (which are traditionally not shipped alongside the software
-product) or because of version mismatch of the operating system.
+product) or because of a version mismatch of the operating system.
 
 The same approach can be used to build research projects, which also suffer
 from the same "works on my machine" problem as any other type of software.
@@ -240,7 +240,7 @@ share the right version of the software used to produce these scripts, as well
 as the right version of the used libraries by building and sharing a Docker
 image (or at least provide the necessary blueprint to enable others to do so, as
 we will discuss below). Future researchers looking to reproduce the results can
-now simple run a container from the provided image (or build an image themselves
+now simply run a container from the provided image (or build an image themselves
 if the original authors provided the required blueprints).
 
 Concretely, to build a Docker image, a researcher writes a so-called
@@ -258,11 +258,11 @@ are going to use as a base. Our image will be based on the `rocker/r-ver:4.3.0`
 image. The Rocker project is a repository containing many images that ship
 different versions of R and packages pre-installed: so the image called
 `r-ver:4.3.0` is an image that ships R version 4.3.0. The last line states which
-command should run when the user runs a container defined from our image, so in
+command should be run when the user runs a container defined from our image, so in
 this case, simply the R interactive prompt. Concretely, the above image would
 allow someone to run R version 4.3.0 as a container, completely isolated from
 the rest of their computer. This allows users to run different versions of R on
-the same system. We can add more commands in order to run a complete research
+the same system. We can add more commands to run a complete research
 project, from start to finish. Below is an example of a Dockerfile that runs an
 analysis script, by first stating which base image is going to be used, and then
 adding packages, files and data to run the entire project:
@@ -289,7 +289,7 @@ RUN cd /home/research_project && R -e "source('analyse_data.R')"
 CMD mv /home/research_project/project_output/* /home/research_project/shared_folder/
 ```
 
-This Dockerfile starts off from the same base image, an image that ships R
+This Dockerfile starts from the same base image, an image that ships R
 version 4.3.0, then it installs the `{dplyr}` package, a popular R package for
 data manipulation and it creates three directories:
 
@@ -297,8 +297,8 @@ data manipulation and it creates three directories:
 - `/home/research_project/project_output`
 - `/home/research_project/shared_folder`.
 
-Then, it copies the `analyse_data.R` script , which contains the actual analysis
-made for the purposes of the research project, and the `dataset.csv` file, into
+Then, it copies the `analyse_data.R` script, which contains the actual analysis
+made for the research project, and the `dataset.csv` file, into
 the Docker image. The second-to-last line runs the script, and the last line
 moves the outputs generated from running the `analyse_data.R` script to a folder
 called `shared_folder`. It is important to say that `RUN` statements will be
@@ -328,13 +328,13 @@ container and the container itself: by doing this, the outputs generated within
 the container can now be accessed from the host's computer.
 
 The image built by the process above is immutable: so as long as users can run
-it, the outputs produced will be exactly the same as when the original author
+it, the outputs produced will be the same as when the original author
 ran the original analysis. However, if the image gets lost, and needs to be
 rebuilt, the above `Dockerfile` will not generate the same image. This is because
 the `Dockerfile`, as it is written above, will download the version of `{dplyr}`
 that is current at the time it gets built. So if a user instead builds the image
 in 5 years, the version of `{dplyr}` that will get downloaded will not be the
-same as the one that was actually used for the original analysis. The version of
+same as the one that was used for the original analysis. The version of
 R, however, will forever remain at version 4.3.0.
 
 So to ensure that future researchers will download the right versions of
@@ -367,7 +367,7 @@ COPY renv.lock /home/research_project/renv.lock
 RUN R -e "setwd('/home/research_project);renv::init();renv::restore()"
 ```
 
-However, what should researchers that want to replicate a past study do if the
+However, what should researchers who want to replicate a past study do if the
 original researcher did not provide a Dockerfile nor an `renv.lock` file? This
 is exactly the challenge that we were facing when trying to replicate the
 results of @davenport2022multiracial. We needed to find a way to first install
@@ -415,17 +415,17 @@ RUN rig default 4.2.0
 Everything else: package versions and operating system that the replication
 script runs on, stayed the same.
 
-With this setup, we were thus able to run the original analysis on an
+With this setup, we were able to run the original analysis on an
 environment that was as close as possible to the original environment used by
 @davenport2022multiracial. However, it is impossible to regenerate the exact
 environment now. As stated, we had to make an assumption on the date the
-packages were downloaded, but the packages use by the original authors might
+packages were downloaded, but the packages used by the original authors might
 have been much older. Another likely difference is that the operating system
 used inside Docker is the Ubuntu Linux distribution. While Ubuntu is a popular
 Linux distribution, it is much more likely that the original authors used either
 Windows or macOS to perform their analysis. In most cases, the operating system
 does not have an impact on results, but there have been replication studies that
-failed because of this, as in @neupane2019. Thankfully, mismatch of the
+failed because of this, as in @neupane2019. Thankfully, the mismatch of the
 operating system does not seem to be an issue here.
 
 It should also be noted that strictly speaking, using Docker is not completely
@@ -434,12 +434,12 @@ we build our complete analysis, also changes through time. In the examples above
 the image we used, `rhub/rig:latest` is based on Ubuntu 22.04, which is, at of
 writing, the latest long-term support release of the Ubuntu operating system. This
 version of Ubuntu thus still gets updated: so when building the image for our project,
-the underlying base image will be different today than from 6 months from now. And
+the underlying base image will be different today than 6 months from now. And
 when the next Ubuntu long-term support will be released, in April 2024, then 
 `rhub/rig:latest` will this time be based upon this new release of Ubuntu. So building
-in May 2024 will yield a different image than now. In order to avoid this, it is
-possible to use a so-called *digest* which ensure that exactly the same image will
-forever be used as a base. For the purposes of this paper we used the following
+in May 2024 will yield a different image than now. To avoid this, it is
+possible to use a so-called *digest* which ensures the same image will
+forever be used as a base. For this paper, we used the following
 image: `rhub/rig@sha256:0667321839be0c2ade5c14fd8c8bbb311a843ddf690081c5d0dd80dcc98bd6c6`.
 
 Finally, to ensure completeness, instead of using the Posit Package Manager with a fixed date,
@@ -450,7 +450,7 @@ to change any of R's default configurations.
 ### Reproducibility isn't just version and package management — using {targets} to improve readibility and reproducibility
 
 Reproducibility should go beyond providing the right versions of the analysis
-software used. Another import aspect is *readability*, which is difficult to
+software used. Another important aspect is *readability*, which is difficult to
 quantify. There are however some approaches that we suggest researchers could
 employ to improve the readability of their code and thus increase the
 probability of a successful replication.
@@ -460,14 +460,14 @@ scripts that must be run in a certain order. These script-based workflows
 usually grow very large and become chaotic. Documentation must be written
 alongside the scripts to explain how they work and in which order they're
 supposed to be executed, and this documentation then has to be maintained and
-updated as the scripts evolve. When some parts of the code gets changed in one
+updated as the scripts evolve. When some parts of the code are changed in one
 script, the researcher has to remember which parts of the other scripts get
 impacted and either only run the relevant, now outdated, parts, or re-run the
 whole project which can be quite time-consuming. Here again, it helps to view a
-researcher paper (and in particular its computer code) as a piece of software.
+research paper (and in particular its computer code) as a piece of software.
 Software engineers are faced with the exact same problem but solved it many
 decades ago using so-called build automation tools. These build automation tools
-allow one to describe how a particular piece of software should get built. Other
+allow one to describe how a particular piece of software should be built. Other
 software engineers that wish to build that piece of software thus only need to
 execute the build automation tool which will take care of executing the right
 steps in the right order.
@@ -479,7 +479,7 @@ benefits:
 
 - `{targets}` keeps track of all the inter-dependencies between the different pieces of the entire codebase. If some part gets changed, `{targets}` *knows* which other parts are affected and only re-executes these;
 - another consequence of this is that `{targets}` also knows which parts of the codebase are independent from each other and can thus be safely executed in parallel. This can lead to tremendous execution speed gains;
-- `{targets}` works by having the user define the computations as a pipeline. This pipeline is in essence the composition of many pure functions, which increases the readibility of the project.
+- `{targets}` works by having the user define the computations as a pipeline. This pipeline is in essence the composition of many pure functions, which increases the readability of the project.
 
 As an illustration of this, we rewrote parts of the original study as a
 `{targets}` pipeline, by re-using the original code from the authors and
@@ -513,9 +513,9 @@ The first target, `data_path` simply defines the path to the data set from the
 original study. The second target, `multiracial_raw` is the data loaded into
 memory. This second target is defined as the output of the `read_sav(data_path)`
 command. Because this second target uses the first target as an input, `{targets}`
-is able to detect that these targets are linked. The third target is 
+can detect that these targets are linked. The third target is 
 `multiracial_1`, which is defined as the output of a function called `basic_clean_1()`.
-This is a function that we defined into another script called `functions.R`. This 
+This is a function that we defined in another script called `functions.R`. This 
 script contains all the code from the original study that was written to clean 
 the data. The only difference is that we have re-defined every piece of code into
 a function. For example, this is what `basic_clean_1()` looks like:
@@ -601,7 +601,7 @@ The original approach, which uses an imperative style of programming, keeps
 changing the `df` object, which is the original SPSS data loaded into memory.
 The issue with this approach is that it becomes very difficult to read and
 follow as the number of operations grows. It is also impossible to easily test
-imperative code. Functions on the other hand, are very easy to test, and very
+imperative code. Functions, on the other hand, are very easy to test, and very
 easy to chain together. Users interested in implementation details can look into
 the source code of the function to understand how it works. If not, reading
 `basic_clean_1(dataset)` is enough to convey that some basic cleaning operations
@@ -609,24 +609,24 @@ were applied to `dataset`. There is no need to burden the user with too much
 code all at once.
 
 The fourth target uses the output of the third target as an input and is defined
-as the output of the `closeness_2()` to function. Here again, readers that are
-interested into what `closeness_2()` does can look at its source code. If not,
+as the output of the `closeness_2()` to function. Here again, readers who are
+interested in what `closeness_2()` does can look at its source code. If not,
 they can move on.
 
 While defining the series of operations as a list of targets improves readability,
 it is sometimes much easier to look at a visual representation of the pipeline.
 This is possible using a command from the `{targets}` package called `tar_visnetwork()`
-Here is the visual representation of the pipeline, before actually running it:
+Here is the visual representation of the pipeline, before running it:
 
 ![A visual representation of the pipeline. No output has been computed yet. \label{fig_dag_before}](./figures/figure3_dag_before.png)
 
 At a glance, it is possible to determine the following:
 
 - a single dataset is being manipulated by several functions;
-- each new instance of the dataset is the output of one, or several functions;
-- there are two functions that were defined that are not being used at all (bottom left).
+- each new instance of the dataset is the output of one or several functions;
+- two functions were defined that are not being used at all (bottom left).
 
-This is actually an interactive visualisation that opens in the users web-browser,
+This is actually an interactive visualization that opens in the user's web browser,
 so it is possible to zoom in and read the labels of the different objects.
 
 To run the pipeline, and compute all the targets, users must execute `targets::tar_make()`.
@@ -641,11 +641,11 @@ loaded into the R session in which the pipeline was executed using
 folder that will appear after the first execution of the pipeline, called
 `_targets`. This folder contains all the targets, which means that even if I
 execute the pipeline in a completely new session the following day, the whole
-pipeline will get skipped, because all the targets have already been computed.
+pipeline will get skipped because all the targets have already been computed.
 This can lead to tremendous time savings. Also, if users do change some code,
 somewhere in the project, `{targets}` will automatically detect which line of
 code was changed, and what is the impact on the rest of the pipeline. For
-example, here we changed some code in one of the functions and visualise the
+example, here we changed some code in one of the functions and visualize the
 pipeline:
 
 ![We can now see that one of the outputs is out of date. \label{fig_dag_ood}](./figures/figure5_dag_ood.png)
@@ -664,19 +664,19 @@ means that the output of `closeness_2()` (`multiracial_2`) is also impacted, and
 thus needs to be recomputed, impacting every other target that uses `multiracial_2`
 as an input directly or indirectly.
 
-In essence, `{targets}` forces its users to write small, well written functions
-and then chain them one after the next in order to generate an output.
+In essence, `{targets}` forces its users to write small, well-written functions
+and then chain them one after the next to generate an output.
 Visualising the execution of the code, and the impact that changing some pieces
 of code have on the whole pipeline helps readability immensely. Future users can
-start by looking at the `_targets.R` file, and then visualise the pipeline and
+start by looking at the `_targets.R` file, and then visualize the pipeline and
 get a high-level understanding of the whole computational process. If they want
 to read the technical implementation details of one or several functions, they
 can do so by simply going to the source code of the relevant function.
 
-One final important note to improve reproducibility of a project: the output of
+One final important note to improve the reproducibility of a project: the output of
 scientific research is more often than not a PDF document. We highly recommend
 using literate programming (@knuth1984literate) coupled with `{targets}` to
-produce articles. In practice this means that the paper itself will get
+produce articles. In practice, this means that the paper itself will get
 generated by `{targets}` as the final output of the whole pipeline. A fairly recent,
 but already very popular engine for literate programming that also supports
 \LaTeX notation is Quarto [@Allaire_Quarto_2022].
@@ -695,10 +695,10 @@ their projects to ensure their long-term reproducibility:
 
 By using Docker, it is possible to provide the correct versions of R and
 packages (using {renv}, {groundhog} or a snapshot of the CRAN repository),
-and by writing a pipeline using {targets} instead of using scripts, reseachers
+and by writing a pipeline using {targets} instead of using scripts, researchers
 improve readability. But this is not only useful for turning projects
 reproducible: by using these tools, researchers also avoid common pitfalls while
-working on their projects. Research projects can last for years, and researchers
+working on their projects. Research projects can last for years and researchers
 typically work on several projects in parallel; by using the tools discussed in
 this article, researchers can thus have project-specific R and package versions,
 thus avoiding the common issue of updating their package library because they
@@ -708,9 +708,9 @@ anymore. Using {targets} also helps researchers on a daily basis, as it
 improves the process of development. In other words, improving the
 reproducibility of a project is also useful for its development.
 
-However, we realise that the entry cost to a tool like Docker is not low: so at
-the very least we advise researchers interested in reproducibility to be very
-conservative with updating R itself, and to use either {renv} or {groundhog} to
+However, we realize that the entry cost to a tool like Docker is not low: so at
+the very least, we advise researchers interested in reproducibility to be very
+conservative with updating R itself and to use either {renv} or {groundhog} to
 have project-specific libraries. This is because if researchers at least provide
 the R version used and an renv.lock file (if they used {renv}, or a date, if
 they used {groundhog}) it is always possible to re-generate an environment with
@@ -722,12 +722,12 @@ it implies that research has to be performed using free and open source tools as
 proprietary tools cannot easily be installed by other researchers wanting to
 reproduce a study.
 
-Another issue with that we need to address is the over-reliance on Docker. While
+A final issue that we want to address is the over-reliance on Docker. While
 we have several alternatives for handling packages, Docker was the only solution
 that we suggested to essentially "freeze" versions of R and other lower-level
-system dependencies. We want to finish this conclusion by stating that there are
-other tools that achieve the same purpose, notably Nix [@dolstra2006purely]. Nix
-is not a containerisation tool like Docker, but a package manager that allows
+system dependencies. We want to finish this conclusion by stating that other tools 
+achieve the same purpose, notably Nix [@dolstra2006purely]. Nix
+is not a containerization tool like Docker, but a package manager that allows
 users to install exact versions of software, including scientific software,
 reproducibly. It is possible to essentially use Nix to replace Docker and `{renv}`
 (or `{groundhog}`), but presenting this tool is outside the scope of this article.
