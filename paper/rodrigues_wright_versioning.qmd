@@ -5,8 +5,8 @@ format:
     number-sections: true
 geometry: margin = 1.0in
 font-size: 11pt
-mainfont: cochineal
-sansfont: "TeX Gyre Heros"
+# mainfont: cochineal
+# sansfont: "TeX Gyre Heros"
 header-includes:
   \usepackage{booktabs}
   \usepackage{setspace}
@@ -19,6 +19,19 @@ header-includes:
 \title{\textbf{Replication materials are great but software versioning still poses a problem for open science}}
 \author{Taylor J. Wright\thanks{Brock University, \href{mailto:twright3@brocku.ca}{twright3@brocku.ca}} \and Bruno Rodrigues \thanks{Ministry of Research and Higher education, Luxembourg}
 }
+
+\singlespacing
+\begin{abstract}
+The growing concern regarding reproducibility and replicability of social science 
+results has powered the adoption of open data and code requirements at journals 
+and norms among researchers. However, even when these norms and requirements are 
+followed, changes to the software used in data cleaning and analysis can render 
+papers non-reproducible. This paper details the challenges of reproducibility in 
+the face of software updates. We present a case study of a published article whose 
+results are no longer reproducible due to changes in the software used. We then 
+discuss the tools and techniques researchers can use to ensure that their research 
+remains reproducible despite changes in the software used.
+\end{abstract}
 
 ```{r, echo=FALSE, include=FALSE}
 library(knitr)
