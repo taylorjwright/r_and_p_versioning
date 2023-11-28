@@ -128,7 +128,7 @@ of multiracial Americans (those who identify with more than one racial group).
 This section of Americans is growing rapidly, but little is known about their
 politics. The authors survey White-Asians and White-Blacks from YouGov's Internet 
 panel and compare them to similarly surveyed White, Black, and Asian monoracial 
-respondents, looking for differences in political ideology; party affiliation;  
+respondents, looking for differences in political ideology, party affiliation,
 positions about cultural issues, social welfare, and police treatment across 
 racial groups.
 
@@ -168,9 +168,9 @@ Figures \ref{postfig1} and \ref{postfig2} present Figures 1 and 2 from
 version of \texttt{R} post 3.6.0 such as the version 3.6.2 that the authors note in their 
 code files). In Panel A of Figures \ref{postfig1} and \ref{postfig2}, 
 White-Asians are now more liberal than Asians and Whites on all issues. In Panel 
-B of figure \ref{postfig1} White-Blacks have more liberal views on cultural issues than 
+B of Figure \ref{postfig1} White-Blacks have more liberal views on cultural issues than 
 Blacks (in terms of point estimates though the confidence interval now contains 0) 
-and are now more liberal regarding police perceptions. In Panel B of figure \ref{postfig2} 
+and are now more liberal regarding police perceptions. In Panel B of Figure \ref{postfig2} 
 the point estimates appear very similar though there is an issue computing 
 confidence intervals.
 
@@ -189,8 +189,8 @@ The issue seems to be that the weights the authors use are non-integer and the
 main function used in their analysis, \texttt{Zelig()}, uses \texttt{sample()} in cases with 
 non-integer values (see
 http://docs.zeligproject.org/articles/weights.html). Following changes to base \texttt{R} 
-in 3.6.x the sample() function, and thus now Zelig, yields different results in 
-\texttt{R} versions later than 3.5.x. Before R 3.6.0 `RNGkind(sample.kind = "Rounding")` 
+in 3.6.x the sample() function, and thus now \texttt{Zelig()}, yields different results in 
+\texttt{R} versions later than 3.5.x. Before \texttt{R} 3.6.0 `RNGkind(sample.kind = "Rounding")` 
 was the default behaviour but after 3.6.0 the sample function's new default 
 behaviour is `RNGkind(sample.kind = "Rejection")` (see 
 https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html for 
@@ -206,7 +206,10 @@ existing code. However, reproducibility is still threatened by software updates
 that result in larger changes (such as what inputs are required). Manually documenting 
 software versions (including packages or commands) in the code or README files 
 is a good start, but as our example shows, it is not enough to ensure faithful
-reproduction. 
+reproduction. It should also be noted that the package that provides the 
+\texttt{Zelig()} function, \texttt{Zelig} is not available anymore. It is still
+possible to install it from the CRAN archive’s, but this constitutes an additional
+risk that must be managed for reproducibility.
 
 \newpage
 
