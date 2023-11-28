@@ -38,12 +38,12 @@ library(flextable)
 
 Beginning in the early 2010s with psychology and quickly spilling over into
 political science and economics on the backs of high-profile cases of fraud
-(@broockman2015irregularities) and errors (@herndon2014does), the "replication
+([@broockman2015irregularities]) and errors ([@herndon2014does]), the "replication
 crisis" in the social sciences has become mainstream, even finding its way into
-the popular press (@aschwanden2015, @gelman2018). Concerns over how well
+the popular press ([@aschwanden2015, @gelman2018]). Concerns over how well
 published results hold up to replication in other settings has led to large
 scale initiatives to document how trustworthy the existing stock of evidence is
-(e.g. @camerer2016evaluating, @chang2022replicable, and @open2015estimating).
+(e.g. [@camerer2016evaluating], [@chang2022replicable], and [@open2015estimating]).
 While the *replicability* of studies has received much attention, there has been
 a tandem movement discussing the importance of and need for research
 *reproducibility*. While the exact scope and definition is subject to ongoing
@@ -77,15 +77,15 @@ policies that require authors to upload their replication materials and have the
 results verified by another team (either the journal's replication team (AER) or
 a third party (AJPS)) before publication. However, even if these materials
 are provided, and even when in place these policies do not have perfect
-compliance (@philip2010report, @stockemer2018data), regular software updates and
+compliance ([@philip2010report, @stockemer2018data]), regular software updates and
 new version releases can result in the replication materials failing to
 faithfully reproduce the authors' results or even run at all.
 ^[@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R}
 changes that could break scripts.]
 
 In this paper, we present a case study of an article published in Journal of
-Politics in January 2022 titled, ``Multiracial Identity and Political
-Preferences'', @davenport2022multiracial, that details replication
+Politics in January 2022 titled, ''Multiracial Identity and Political
+Preferences'', ([@davenport2022multiracial]), that details replication
 challenges arising from changes in the statistical software \texttt{R}. We were
 unable to reproduce the authors' results using either the current version of
 \texttt{R}, or the version that the authors indicate they used. The lack of
@@ -96,10 +96,10 @@ We contribute to the existing literature in three ways.
 First, we add to the discussion about the importance of the availability of 
 replication materials. Existing research documents that the availability of 
 replication materials is associated with a higher citation count 
-(@piwowar2007sharing, @piwowar2013data) and with a higher likelihood of 
-replication (@philip2010report). Much of this research focuses on the provision 
+([@piwowar2007sharing, @piwowar2013data]) and with a higher likelihood of 
+replication ([@philip2010report]). Much of this research focuses on the provision 
 of data and code as a necessary condition for facilitating replication and 
-rebuilding trust in science (@dafoe2014science, @lupia2014data). We contribute 
+rebuilding trust in science ([@dafoe2014science, @lupia2014data]). We contribute 
 to this literature by emphasizing 
 that, while we agree that data and code availability are necessary, their 
 existence cannot guarantee reproducibility. This brings us to our second 
@@ -107,7 +107,7 @@ contribution: we expand on the discussion of problems raised by software and
 package versioning for reproducibility by providing a walkthrough of the problem
 using a concrete example. Lastly, we further the discussion of tools and best 
 practices for ensuring reproducibility. Specifically, we provide a step-by-step 
-guide to using Docker and {renv} to ensure the reproducibility of 
+guide to using Docker and the \texttt{renv} \texttt{R} package to ensure the reproducibility of 
 research.
 
 The rest of the article proceeds as follows: Section 2 walks through the
@@ -121,7 +121,8 @@ post-publication changes in the tools used; and Section 4 concludes.
 
 ## Reproduction
 
-### Illustrating the issue with software versioning 
+### Illustrating the issue with software versioning
+
 @davenport2022multiracial examine the political ideology and policy preferences 
 of multiracial Americans (those who identify with more than one racial group). 
 This section of Americans is growing rapidly, but little is known about their
@@ -155,7 +156,7 @@ welfare and police perceptions.
 
 Importantly, the authors provide replication materials at the Journal of Politics 
 Dataverse, including the code used to conduct their analysis as well as the data 
-itself. The code files contain comments noting that the analysis "Requires R 
+itself. The code files contain comments noting that the analysis "Requires \texttt{R} 
 version 3.6.2 (2019-12-12)".
 
 ![Figure 1 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig1}](./figures/figure1_postchange.png)
@@ -164,7 +165,7 @@ version 3.6.2 (2019-12-12)".
 
 Figures \ref{postfig1} and \ref{postfig2} present Figures 1 and 2 from 
 @davenport2022multiracial when using a later software version (specifically a 
-version of R post 3.6.0 such as the version 3.6.2 that the authors note in their 
+version of \texttt{R} post 3.6.0 such as the version 3.6.2 that the authors note in their 
 code files). In Panel A of Figures \ref{postfig1} and \ref{postfig2}, 
 White-Asians are now more liberal than Asians and Whites on all issues. In Panel 
 B of \ref{postfig1} White-Blacks have more liberal views on cultural issues than 
@@ -180,23 +181,23 @@ confidence intervals.
 
 Figures \ref{postfig1} and \ref{postfig2} provide Figures 1 and 2 from 
 @davenport2022multiracial when using an earlier software version (specifically a 
-version of R pre 3.6.0). Minor issues with the confidence intervals in Panel B of
+version of \texttt{R} pre 3.6.0). Minor issues with the confidence intervals in Panel B of
 Figure \ref{prefig2} aside, these are otherwise the same as those presented in
 the published article. 
 
 The issue seems to be that the weights the authors use are non-integer and the 
 main function used in their analysis, Zelig, uses sample() in cases with 
 non-integer values (see
-http://docs.zeligproject.org/articles/weights.html). Following changes to base R 
-in 3.6.x, the sample() function and thus now Zelig, yields different results in 
-R versions later than 3.5.x. Before R 3.6.0 RNGkind(sample.kind = "Rounding") 
+http://docs.zeligproject.org/articles/weights.html). Following changes to base \texttt{R} 
+in 3.6.x the sample() function, and thus now Zelig, yields different results in 
+\texttt{R} versions later than 3.5.x. Before R 3.6.0 `RNGkind(sample.kind = "Rounding")` 
 was the default behaviour but after 3.6.0 the sample function's new default 
-behaviour is RNGkind(sample.kind = "Rejection") (see 
+behaviour is `RNGkind(sample.kind = "Rejection")` (see 
 https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html for 
 more details).
 
 The key takeaway is that despite the authors providing replication materials and
-indicating which version of R they believed they used, the results cannot be 
+indicating which version of \texttt{R} they believed they used, the results cannot be 
 reproduced. This is not a criticism of the authors, but rather a demonstration
 of the challenges of reproducibility in the face of software updates. There are 
 ways to ensure that the estimates are consistent (such as ensuring to always 
@@ -216,16 +217,16 @@ reproduction.
 Replicating results from past studies is quite challenging, for many reasons.
 This article focuses on one of these reasons: results cannot be reproduced
 because of changes introduced in more recent versions of the software used for
-analysis, despite the availability of both data and the authors’ original
+analysis, despite the availability of both data and the author' original
 scripts.
 
 To reproduce the results from the original study and to pinpoint the impact of
-the change introduced in R 3.6.0, we chose to use Docker. Docker is a
+the change introduced in \texttt{R} 3.6.0, we chose to use Docker. Docker is a
 containerization tool that enables one to build so-called *images*. These
 images are usually built on top of a Linux operating system and contain all of
 the required software to build any type of output. After the image containing
 the output has been built, users in turn only need to be able to run Docker
-*containers* instantiated from the image definition to run the output.
+*containers* instantiated from the image definition to build the output.
 Containerization tools such as Docker solved the "works on my machine" problem:
 this problem arises when software that works well on the development machine of
 the developer fails to run successfully on a customer's machine. This usually
@@ -256,9 +257,9 @@ CMD ["R"]
 
 This Dockerfile contains two lines: the first line states which Docker image we
 are going to use as a base. Our image will be based on the `rocker/r-ver:4.3.0`
-image. The Rocker project is a repository containing many images that ship
+image. The Rocker project ([@boettiger2017]) is a repository containing many images that ship
 different versions of R and packages pre-installed: so the image called
-`r-ver:4.3.0` is an image that ships R version 4.3.0. The last line states which
+`r-ver:4.3.0` is an image that ships \texttt{R} version 4.3.0. The last line states which
 command should be run when the user runs a container defined from our image, so in
 this case, simply the R interactive prompt. Concretely, the above image would
 allow someone to run R version 4.3.0 as a container, completely isolated from
@@ -336,13 +337,13 @@ the `Dockerfile`, as it is written above, will download the version of `{dplyr}`
 that is current at the time it gets built. So if a user instead builds the image
 in 5 years, the version of `{dplyr}` that will get downloaded will not be the
 same as the one that was used for the original analysis. The version of
-R, however, will forever remain at version 4.3.0.
+\texttt{R}, however, will forever remain at version 4.3.0.
 
 So to ensure that future researchers will download the right versions of
 packages that were originally used for the project, the original researcher also
 needs to provide a list of packages that were used as well as the packages'
 versions. This can be quite tedious if done by hand, but thankfully, there are
-ways to generate such lists very easily. The `{renv}` package for the R
+ways to generate such lists very easily. The `{renv}` package for the \texttt{R}
 programming language provides such a function. Once the project is done, one
 simply needs to call:
 
@@ -350,7 +351,7 @@ simply needs to call:
 renv::init()
 ```
 
-to generate a file called `renv.lock`. This file contains the R version that was
+to generate a file called `renv.lock`. This file contains the \texttt{R} version that was
 used to generate it, the list of packages that were used for the project, as
 well as their versions and links to download them. This file can be used to
 easily install all the required packages in the future by simply running:
@@ -372,14 +373,14 @@ However, what should researchers who want to replicate a past study do if the
 original researcher did not provide a Dockerfile nor an `renv.lock` file? This
 is exactly the challenge that we were facing when trying to replicate the
 results of @davenport2022multiracial. We needed to find a way to first install
-the right version of R, then the right version of the packages that they used,
+the right version of \texttt{R}, then the right version of the packages that they used,
 run their original script, and then repeat this procedure but this time on a
-recent version of R.
+recent version of \texttt{R}.
 
 In order to achieve this, we used a Docker image provided by the [R Installation
 Manager](https://github.com/r-lib/rig)^[https://github.com/r-lib/rig] project.
-This Docker image includes a tool, called `rig`, that makes it easy to switch R
-versions, so we used it to first define an image that would use R version 3.5.0
+This Docker image includes a tool, called `rig`, that makes it easy to switch \texttt{R}
+versions, so we used it to first define an image that would use \texttt{R} version 3.5.0
 by default as a base. Here are the three commands from the Dockerfile to achieve
 this:
 
@@ -397,12 +398,12 @@ used packages, but not their exact versions, we assumed that the required
 packages were installed one year before the paper was published, so sometime in
 May 2019. With this assumption, we then used the [Posit Package
 Manager](https://packagemanager.posit.co/client/#/repos/2/overview)^[https://packagemanager.posit.co/client/#/repos/2/overview],
-which provides snapshots of CRAN that can be used to install R packages as they
-were on a given date. We thus configured R to download packages from the
+which provides snapshots of CRAN that can be used to install \texttt{R} packages as they
+were on a given date. We thus configured \texttt{R} to download packages from the
 snapshot taken on May 16th, 2019. Then, the original replication script gets
 executed at image build time and we can obtain the outputs from running a
 container from this image definition. With this setup, it was very simple to
-only switch R versions and re-executed everything. We simply had to switch the
+only switch \texttt{R} versions and re-execute everything. We simply had to switch the
 commands from the Dockerfile:
 
 ```
@@ -432,7 +433,7 @@ operating system does not seem to be an issue here.
 It should also be noted that strictly speaking, using Docker is not completely
 reproducible either: this is because the underlying base image, upon which
 we build our complete analysis, also changes through time. In the examples above
-the image we used, `rhub/rig:latest` is based on Ubuntu 22.04, which is, at of
+the image we used, `rhub/rig:latest` is based on Ubuntu 22.04, which is, as of
 writing, the latest long-term support release of the Ubuntu operating system. This
 version of Ubuntu thus still gets updated: so when building the image for our project,
 the underlying base image will be different today than 6 months from now. And
@@ -446,7 +447,7 @@ image: `rhub/rig@sha256:0667321839be0c2ade5c14fd8c8bbb311a843ddf690081c5d0dd80dc
 Finally, to ensure completeness, instead of using the Posit Package Manager with a fixed date,
 we could have used the `{groundhog}` package by @simonsohn2023. This package makes it possible to
 download packages as of a certain date as well, and it does not require users
-to change any of R's default configurations.
+to change any of \texttt{R}'s default configurations.
 
 \newpage
 
@@ -460,14 +461,15 @@ their projects to ensure their long-term reproducibility:
 - They need to make sure that their code is readable and easy to explore; and
 - They need to provide instructions on how to run the whole project.
 
-By using Docker, it is possible to provide the correct versions of R and
-packages (using {renv}, {groundhog} or a snapshot of the CRAN repository),
-and by writing a pipeline using a tool like {targets} instead of using scripts, 
-researchers improve readability. But this is not only useful for making projects
+By using Docker, it is possible to provide the correct versions of \texttt{R} and
+packages (using \texttt{renv}, \texttt{groundhog} or a snapshot of the CRAN repository).
+Another important way to improve reproducibility is also to set up research projects
+as the output of pipelines instead of scripts, but this is outside the scope of this paper.
+But this is not only useful for making projects
 reproducible: by using these tools, researchers also avoid common pitfalls while
 working on their projects. Research projects can last for years and researchers
 typically work on several projects in parallel; by using the tools discussed in
-this article, researchers can thus have project-specific R and package versions,
+this article, researchers can thus have project-specific \texttt{R} and package versions,
 thus avoiding the common issue of updating their package library because they
 need the latest feature of a package for one project, but because packages got
 updated, another project now produces different results or simply does not run
@@ -475,11 +477,11 @@ anymore.
 
 However, we realize that the entry cost to a tool like Docker is not low: so at
 the very least, we advise researchers interested in reproducibility to be very
-conservative with updating R itself and to use either {renv} or {groundhog} to
+conservative with updating R itself and to use either \texttt{renv} or \texttt{groundhog} to
 have project-specific libraries. This is because if researchers at least provide
-the R version used and an renv.lock file (if they used {renv}, or a date, if
-they used {groundhog}) it is always possible to re-generate an environment with
-the right version of R and packages as we did for this paper. This solution is
+the R version used and an renv.lock file (if they used \texttt{renv}, or a date, if
+they used \texttt{groundhog}) it is always possible to re-generate an environment with
+the right version of \texttt{R} and packages as we did for this paper. This solution is
 not the gold standard of reproducibility though, but easy enough to be
 implemented at a low cost. This also implies that researchers need to share
 their code and all other necessary information on a platform such as Github, and
@@ -494,8 +496,8 @@ system dependencies. We want to finish this conclusion by stating that other too
 achieve the same purpose, notably Nix [@dolstra2006purely]. Nix
 is not a containerization tool like Docker, but a package manager that allows
 users to install exact versions of software, including scientific software,
-reproducibly. It is possible to essentially use Nix to replace Docker and `{renv}`
-(or `{groundhog}`), but presenting this tool is outside the scope of this article.
+reproducibly. It is possible to essentially use Nix to replace Docker and \texttt{renv}
+(or \texttt{groundhog}), but presenting this tool is outside the scope of this article.
 
 \newpage
 
