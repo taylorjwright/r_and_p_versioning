@@ -43,7 +43,7 @@ crisis" in the social sciences has become mainstream, even finding its way into
 the popular press [@aschwanden2015; @gelman2018]. Concerns over how well
 published results hold up to replication in other settings has led to large
 scale initiatives to document how trustworthy the existing stock of evidence is
-[e.g. @camerer2016evaluating; @chang2022replicable; and @open2015estimating].
+[e.g. @camerer2016evaluating; @chang2022replicable; and Open Science Collaboration -@open2015estimating].
 While the *replicability* of studies has received much attention, there has been
 a tandem movement discussing the importance of and need for research
 *reproducibility*. While the exact scope and definition is subject to ongoing
