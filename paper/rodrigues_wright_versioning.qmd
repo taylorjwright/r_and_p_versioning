@@ -38,12 +38,12 @@ library(flextable)
 
 Beginning in the early 2010s with psychology and quickly spilling over into
 political science and economics on the backs of high-profile cases of fraud
-([@broockman2015irregularities]) and errors ([@herndon2014does]), the "replication
+[@broockman2015irregularities] and errors [@herndon2014does], the "replication
 crisis" in the social sciences has become mainstream, even finding its way into
-the popular press ([@aschwanden2015, @gelman2018]). Concerns over how well
+the popular press [@aschwanden2015; @gelman2018]. Concerns over how well
 published results hold up to replication in other settings has led to large
 scale initiatives to document how trustworthy the existing stock of evidence is
-(e.g. [@camerer2016evaluating], [@chang2022replicable], and [@open2015estimating]).
+[e.g. @camerer2016evaluating; @chang2022replicable; and @open2015estimating].
 While the *replicability* of studies has received much attention, there has been
 a tandem movement discussing the importance of and need for research
 *reproducibility*. While the exact scope and definition is subject to ongoing
@@ -77,7 +77,7 @@ policies that require authors to upload their replication materials and have the
 results verified by another team (either the journal's replication team (AER) or
 a third party (AJPS)) before publication. However, even if these materials
 are provided, and even when in place these policies do not have perfect
-compliance ([@philip2010report, @stockemer2018data]), regular software updates and
+compliance [@philip2010report; @stockemer2018data], regular software updates and
 new version releases can result in the replication materials failing to
 faithfully reproduce the authors' results or even run at all.
 ^[@simonsohn95GroundhogAddressing2021 presents several examples of \texttt{R}
@@ -85,7 +85,7 @@ changes that could break scripts.]
 
 In this paper, we present a case study of an article published in Journal of
 Politics in January 2022 titled, ''Multiracial Identity and Political
-Preferences'', ([@davenport2022multiracial]), that details replication
+Preferences'', [@davenport2022multiracial], that details replication
 challenges arising from changes in the statistical software \texttt{R}. We were
 unable to reproduce the authors' results using either the current version of
 \texttt{R}, or the version that the authors indicate they used. The lack of
@@ -96,10 +96,10 @@ We contribute to the existing literature in three ways.
 First, we add to the discussion about the importance of the availability of 
 replication materials. Existing research documents that the availability of 
 replication materials is associated with a higher citation count 
-([@piwowar2007sharing, @piwowar2013data]) and with a higher likelihood of 
-replication ([@philip2010report]). Much of this research focuses on the provision 
+[@piwowar2007sharing; @piwowar2013data] and with a higher likelihood of 
+replication [@philip2010report]. Much of this research focuses on the provision 
 of data and code as a necessary condition for facilitating replication and 
-rebuilding trust in science ([@dafoe2014science, @lupia2014data]). We contribute 
+rebuilding trust in science [@dafoe2014science; @lupia2014data]. We contribute 
 to this literature by emphasizing 
 that, while we agree that data and code availability are necessary, their 
 existence cannot guarantee reproducibility. This brings us to our second 
@@ -168,9 +168,9 @@ Figures \ref{postfig1} and \ref{postfig2} present Figures 1 and 2 from
 version of \texttt{R} post 3.6.0 such as the version 3.6.2 that the authors note in their 
 code files). In Panel A of Figures \ref{postfig1} and \ref{postfig2}, 
 White-Asians are now more liberal than Asians and Whites on all issues. In Panel 
-B of \ref{postfig1} White-Blacks have more liberal views on cultural issues than 
+B of figure \ref{postfig1} White-Blacks have more liberal views on cultural issues than 
 Blacks (in terms of point estimates though the confidence interval now contains 0) 
-and are now more liberal regarding police perceptions. In Panel B of \ref{postfig2} 
+and are now more liberal regarding police perceptions. In Panel B of figure \ref{postfig2} 
 the point estimates appear very similar though there is an issue computing 
 confidence intervals.
 
@@ -186,7 +186,7 @@ Figure \ref{prefig2} aside, these are otherwise the same as those presented in
 the published article. 
 
 The issue seems to be that the weights the authors use are non-integer and the 
-main function used in their analysis, Zelig, uses sample() in cases with 
+main function used in their analysis, \texttt{Zelig()}, uses \texttt{sample()} in cases with 
 non-integer values (see
 http://docs.zeligproject.org/articles/weights.html). Following changes to base \texttt{R} 
 in 3.6.x the sample() function, and thus now Zelig, yields different results in 
@@ -257,7 +257,7 @@ CMD ["R"]
 
 This Dockerfile contains two lines: the first line states which Docker image we
 are going to use as a base. Our image will be based on the `rocker/r-ver:4.3.0`
-image. The Rocker project ([@boettiger2017]) is a repository containing many images that ship
+image. The Rocker project [@boettiger2017] is a repository containing many images that ship
 different versions of R and packages pre-installed: so the image called
 `r-ver:4.3.0` is an image that ships \texttt{R} version 4.3.0. The last line states which
 command should be run when the user runs a container defined from our image, so in
