@@ -96,10 +96,11 @@ We contribute to the existing literature in three ways.
 First, we add to the discussion about the importance of the availability of 
 replication materials. Existing research documents that the availability of 
 replication materials is associated with a higher citation count 
-(@stockemer2018data, is this reference true?) and with a higher likelihood of 
+(@piwowar2007sharing, @piwowar2013data) and with a higher likelihood of 
 replication (@philip2010report). Much of this research focuses on the provision 
 of data and code as a necessary condition for facilitating replication and 
-rebuilding trust in science (). We contribute to this literature by emphasizing 
+rebuilding trust in science (@dafoe2014science, @lupia2014data). We contribute 
+to this literature by emphasizing 
 that, while we agree that data and code availability are necessary, their 
 existence cannot guarantee reproducibility. This brings us to our second 
 contribution: we expand on the discussion of problems raised by software and 
