@@ -85,7 +85,7 @@ Statement which was signed by editors of 27 leading political science journals:
 Specifically, the provision and publication of underlying data and code used for
 data preparation and analysis. This push has seen some success, with a growing
 number journals now requiring the provision of replication materials as a
-condition of publication. Some journals, such as the American Economic Review
+condition of publication. @rainey2024data collect data availability policies between January and April of 2023 for "Political Science" and "International Relations" journals in Social Science Citation Index and APSA journals, finding that 20% require data to be shared and 65% encourage (but do not require) it. Some journals, such as the American Economic Review
 (AER) or American Journal of Political Science (AJPS), even have verification
 policies that require authors to upload their replication materials and have their
 results verified by another team (either the journal's replication team (AER) or
