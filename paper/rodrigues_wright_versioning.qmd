@@ -52,8 +52,8 @@ library(flextable)
 
 Beginning in the early 2010s with psychology and quickly spilling over into
 political science and economics on the backs of high-profile cases of fraud
-[@broockman2015irregularities] and errors [@herndon2014does], the "replication
-crisis" in the social sciences has become mainstream, even finding its way into
+[@broockman2015irregularities] and errors [@herndon2014does], the \`\`replication
+crisis\" in the social sciences has become mainstream, even finding its way into
 the popular press [@aschwanden2015; @gelman2018]. Concerns over how well
 published results hold up to replication in other settings has led to large
 scale initiatives to document how trustworthy the existing stock of evidence is
@@ -85,10 +85,13 @@ Statement which was signed by editors of 27 leading political science journals:
 Specifically, the provision and publication of underlying data and code used for
 data preparation and analysis. This push has seen some success, with a growing
 number journals now requiring the provision of replication materials as a
-condition of publication. @rainey2024data collect data availability policies between January and April of 2023 for "Political Science" and "International Relations" journals in Social Science Citation Index and APSA journals, finding that 20% require data to be shared and 65% encourage (but do not require) it. Some journals, such as the American Economic Review
-(AER) or American Journal of Political Science (AJPS), even have verification
-policies that require authors to upload their replication materials and have their
-results verified by another team (either the journal's replication team (AER) or
+condition of publication. @rainey2024data collect data availability policies between
+January and April of 2023 for \`\`Political Science\" and \`\`International Relations\" 
+journals in Social Science Citation Index and APSA journals, finding that 20% require 
+data to be shared and 65% encourage (but do not require) it. Some journals, such as 
+the American Economic Review(AER) or American Journal of Political Science (AJPS), even 
+have verification policies that require authors to upload their replication materials and 
+have their results verified by another team (either the journal's replication team (AER) or
 a third party (AJPS)) before publication. However, even if these materials
 are provided, and even when in place these policies do not have perfect
 compliance [@philip2010report; @stockemer2018data], regular software updates and
@@ -98,8 +101,8 @@ faithfully reproduce the authors' results or even run at all.
 changes that could break scripts.]
 
 In this paper, we present a case study of an article published in Journal of
-Politics in January 2022 titled, ''Multiracial Identity and Political
-Preferences'', [@davenport2022multiracial], that details replication
+Politics in January 2022 titled, \`\`Multiracial Identity and Political
+Preferences\", [@davenport2022multiracial], that details replication
 challenges arising from changes in the statistical software \texttt{R}. We were
 unable to reproduce the authors' results using either the current version of
 \texttt{R}, or the version that the authors indicate they used. The lack of
@@ -170,8 +173,8 @@ welfare and police perceptions.
 
 Importantly, the authors provide replication materials at the Journal of Politics 
 Dataverse, including the code used to conduct their analysis as well as the data 
-itself. The code files contain comments noting that the analysis "Requires \texttt{R} 
-version 3.6.2 (2019-12-12)".
+itself. The code files contain comments noting that the analysis \`\`Requires \texttt{R} 
+version 3.6.2 (2019-12-12)\".
 
 ![Figure 1 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig1}](./figures/figure1_postchange.png)
 
@@ -202,19 +205,25 @@ the published article.
 The issue seems to be that the weights the authors use are non-integer and the 
 main function used in their analysis, \texttt{Zelig()}, uses \texttt{sample()} in cases with 
 non-integer values (see
-http://docs.zeligproject.org/articles/weights.html). Following changes to base \texttt{R} 
-in 3.6.x the sample() function, and thus now \texttt{Zelig()}, yields different results in 
-\texttt{R} versions later than 3.5.x. Before \texttt{R} 3.6.0 `RNGkind(sample.kind = "Rounding")` 
-was the default behaviour but after 3.6.0 the sample function's new default 
-behaviour is `RNGkind(sample.kind = "Rejection")` (see 
-https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html for 
-more details).
+[http://docs.zeligproject.org/articles/weights.html](http://docs.zeligproject.org/articles/weights.html)).
+Following changes to base \texttt{R}  in 3.6.x the sample() function, and thus now \texttt{Zelig()}, yields different results in \texttt{R} versions later than 3.5.x. Before \texttt{R} 3.6.0 `RNGkind(sample.kind = "Rounding")` was the default behaviour but after 3.6.0 the sample function's new default 
+behaviour is `RNGkind(sample.kind = "Rejection")`.^[See this announcement about \texttt{R} 3.6.0 for more details: 
+[https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html](https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html)] 
+Why was this change made? According to the `RNGkind` documentation, 
+\`\`sample.kind can be \`\`Rounding\" or \`\`Rejection\", or partial matches to these. 
+The former was the default in versions prior to 3.6.0: it made sample noticeably
+non-uniform on large populations, and should only be used for reproduction of old 
+results\" [@rcoreteam2024]. In essence, the algorithm for random number generation 
+contained a bug that led to bias in the probabilities of numbers being chosen.^[We refer 
+interested readers to the thread reporting the bug and links contained within: [https://bugs.r-project.org/show_bug.cgi?id=17494](https://bugs.r-project.org/show_bug.cgi?id=17494)]. 
+As such, the correct version is the one created using R after version 3.6.0.
 
-The key takeaway is that despite the authors providing replication materials and
-indicating which version of \texttt{R} they believed they used, the results cannot be 
-reproduced. This is not a criticism of the authors, but rather a demonstration
-of the challenges of reproducibility in the face of software updates. There are 
-ways to ensure that the estimates are consistent (such as ensuring to always 
+A key takeaway, and focus of this paper, is that despite the authors providing 
+replication materials and indicating which version of \texttt{R} they believed 
+they used, the results cannot be reproduced. This aspect is not a criticism of the 
+authors, who were unknowingly using software that contained an error, but rather a 
+demonstration of the challenges of reproducibility in the face of software updates. 
+There are ways to ensure that the estimates are consistent (such as ensuring to always 
 explicitly articulate options in functions so that changes to defaults cannot break
 existing code. However, reproducibility is still threatened by software updates 
 that result in larger changes (such as what inputs are required). Manually documenting 
@@ -244,7 +253,7 @@ images are usually built on top of a Linux operating system and contain all of
 the required software to build any type of output. After the image containing
 the output has been built, users in turn only need to be able to run Docker
 *containers* instantiated from the image definition to build the output.
-Containerization tools such as Docker solved the "works on my machine" problem:
+Containerization tools such as Docker solved the \`\`works on my machine\" problem:
 this problem arises when software that works well on the development machine of
 the developer fails to run successfully on a customer's machine. This usually
 happens because the customer's computer does not have the necessary dependencies
@@ -252,7 +261,7 @@ to run the software (which are traditionally not shipped alongside the software
 product) or because of a version mismatch of the operating system.
 
 The same approach can be used to build research projects, which also suffer
-from the same "works on my machine" problem as any other type of software.
+from the same \`\`works on my machine\" problem as any other type of software.
 Containerization tools offer a great opportunity for reproducibility in
 research: instead of just sharing a replication script, authors can now easily
 share the right version of the software used to produce these scripts, as well
@@ -508,7 +517,7 @@ reproduce a study.
 
 A final issue that we want to address is the over-reliance on Docker. While
 we have several alternatives for handling packages, Docker was the only solution
-that we suggested to essentially "freeze" versions of R and other lower-level
+that we suggested to essentially \`\`freeze\" versions of R and other lower-level
 system dependencies. We want to finish this conclusion by stating that other tools 
 achieve the same purpose, notably Nix [@dolstra2006purely]. Nix
 is not a containerization tool like Docker, but a package manager that allows
