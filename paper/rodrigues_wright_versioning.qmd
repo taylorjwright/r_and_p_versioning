@@ -11,8 +11,8 @@ header-includes:
   \usepackage{booktabs}
   \usepackage{setspace}
   \doublespacing
-  \usepackage[left]{lineno}
-  \linenumbers
+  #\usepackage[left]{lineno}
+  #\linenumbers
 ---
 
 \date{\today}
@@ -149,58 +149,70 @@ respondents, looking for differences in political ideology, party affiliation,
 positions about cultural issues, social welfare, and police treatment across 
 racial groups.
 
+::: {layout="[[1], [1], [1]]"}
 ![Figure 1 from @davenport2022multiracial. Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{dfifig1}](./figures/figure1_screenshot.png)
 
-![Figure 2 from @davenport2022multiracial. Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{dfifig2}](./figures/figure2_screenshot.png)
+![Figure 1 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig1}](./figures/figure1_postchange.png)
 
-Figures \ref{dfifig1} and \ref{dfifig2} present Figures 1 and 2 from
-@davenport2022multiracial which contain the main results. Panel A corresponds to 
-results for White-Asian respondents while panel B corresponds to White-Black 
-respondents. In Figure \ref{dfifig1}, the x-axis reflects the differences in a given 
-multiracial group's attitudes relative to the corresponding monoracial group 
-(e.g. White-Asian relative to Asians) with higher values meaning more liberal 
-attitudes. In Figure \ref{dfifig2}, the x-axis reflects a similar difference but relative
-to monoracial Whites (e.g. White-Asian relative to Whites). 
-Figure 1 indicates that White-Asians have more liberal attitudes on cultural issues
-than Asians while White-Blacks have more liberal attitudes on cultural issues 
-than Blacks but views regarding social welfare and police perception appear to 
-be comparable between White-Asians and Asians and between White-Blacks and Blacks. 
-Figure 2 Panel A suggests that White-Asians are more liberal than Whites when it 
-comes to cultural issues and police perceptions but similarly liberal with views 
-on social welfare. Figure 2 Panel B indicates that White-Blacks are similarly 
-liberal to Whites on cultural issues but are more liberal on issues of social 
-welfare and police perceptions. 
+![Figure 1 from @davenport2022multiracial when using an earlier software version (R pre 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{prefig1}](./figures/figure1_prechange.png)
+:::
+
+
+Figure \ref{dfifig1} and presents Figure 1 from @davenport2022multiracial 
+which contains the main results. Panel A corresponds to results for White-Asian 
+respondents while panel B corresponds to White-Black respondents. The x-axis 
+reflects the differences in a given multiracial group's attitudes relative to the 
+corresponding monoracial group (e.g. White-Asian relative to Asians) with higher 
+values meaning more liberal attitudes. This figure indicates that White-Asians have
+more liberal attitudes on cultural issues than Asians while White-Blacks have more 
+liberal attitudes on cultural issues than Blacks but views regarding social welfare 
+and police perception appear to be comparable between White-Asians and Asians and 
+between White-Blacks and Blacks. 
 
 Importantly, the authors provide replication materials at the Journal of Politics 
 Dataverse, including the code used to conduct their analysis as well as the data 
 itself. The code files contain comments noting that the analysis \`\`Requires \texttt{R} 
-version 3.6.2 (2019-12-12)\".
+version 3.6.2 (2019-12-12)\". This allows us to recreate the figures.
 
-![Figure 1 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig1}](./figures/figure1_postchange.png)
+Figure \ref{postfig1} presents Figure 1 from @davenport2022multiracial when using 
+a later software version (specifically a version of \texttt{R} post 3.6.0 such as 
+the version 3.6.2 that the authors note in their code files). In Panel A, White-Asians 
+are now more liberal than Asians and Whites on all issues. In Panel B White-Blacks have 
+more liberal views on cultural issues than Blacks (in terms of point estimates though
+the confidence interval now contains 0) and are now more liberal regarding police perceptions. 
+
+Figure \ref{prefig1} provides Figure 1 @davenport2022multiracial when using an 
+earlier software version (specifically a version of \texttt{R} pre 3.6.0). 
+These are otherwise the same as those presented in the published article.
+
+::: {layout="[[1], [1], [1]]"}
+![Figure 2 from @davenport2022multiracial. Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{dfifig2}](./figures/figure2_screenshot.png)
 
 ![Figure 2 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig2}](./figures/figure2_postchange.png)
 
-Figures \ref{postfig1} and \ref{postfig2} present Figures 1 and 2 from 
-@davenport2022multiracial when using a later software version (specifically a 
-version of \texttt{R} post 3.6.0 such as the version 3.6.2 that the authors note in their 
-code files). In Panel A of Figures \ref{postfig1} and \ref{postfig2}, 
-White-Asians are now more liberal than Asians and Whites on all issues. In Panel 
-B of Figure \ref{postfig1} White-Blacks have more liberal views on cultural issues than 
-Blacks (in terms of point estimates though the confidence interval now contains 0) 
-and are now more liberal regarding police perceptions. In Panel B of Figure \ref{postfig2} 
-the point estimates appear very similar though there is an issue computing 
-confidence intervals.
-
-
-![Figure 1 from @davenport2022multiracial when using an earlier software version (R pre 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{prefig1}](./figures/figure1_prechange.png)
-
 ![Figure 2 from @davenport2022multiracial when using an earlier software version (R pre 3.6.0). Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{prefig2}](./figures/figure2_prechange.png)
+:::
 
-Figures \ref{postfig1} and \ref{postfig2} provide Figures 1 and 2 from 
-@davenport2022multiracial when using an earlier software version (specifically a 
-version of \texttt{R} pre 3.6.0). Minor issues with the confidence intervals in Panel B of
-Figure \ref{prefig2} aside, these are otherwise the same as those presented in
-the published article. 
+Figure \ref{dfifig2} presents Figure 2 from @davenport2022multiracial. Again, 
+Panel A corresponds to results for White-Asian respondents while panel B corresponds 
+to White-Black respondents. The x-axis reflects a similar difference but relative
+to monoracial Whites (e.g. White-Asian relative to Whites). Figure 2 Panel A 
+suggests that White-Asians are more liberal than Whites when it comes to cultural 
+issues and police perceptions but similarly liberal with views on social welfare. 
+Figure 2 Panel B indicates that White-Blacks are similarly liberal to Whites on 
+cultural issues but are more liberal on issues of social welfare and police perceptions.
+
+Figure \ref{postfig2} presents Figure 2 from @davenport2022multiracial when using 
+a later software version (specifically a version of \texttt{R} post 3.6.0 such as 
+the version 3.6.2 that the authors note in their code files). In Panel A, 
+White-Asians are now more liberal than Asians and Whites on all issues. In Panel B 
+of Figure \ref{postfig2} the point estimates appear very similar though there is 
+an issue computing confidence intervals.
+
+Figure \ref{prefig2} provides Figure 2 from @davenport2022multiracial when using 
+an earlier software version (specifically a version of \texttt{R} pre 3.6.0). 
+Minor issue with the confidence interval in Panel B aside, these are also otherwise 
+the same as those presented in the published article. 
 
 The issue seems to be that the weights the authors use are non-integer and the 
 main function used in their analysis, \texttt{Zelig()}, uses \texttt{sample()} in cases with 
