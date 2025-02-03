@@ -49,7 +49,7 @@ library(flextable)
 
 \newpage
 
-## Introduction
+## Introduction {#sec-introduction}
 
 Beginning in the early 2010s with psychology and quickly spilling over into
 political science and economics on the backs of high-profile cases of fraud
@@ -137,7 +137,7 @@ post-publication changes in the tools used; and Section 4 concludes.
 
 \newpage
 
-## Reproduction
+## Reproduction {#sec-reproduction}
 
 ### Illustrating the issue with software versioning
 
@@ -249,79 +249,11 @@ risk that must be managed for reproducibility.
 
 ### Result sensitivity to seed
 
-\newpage
-
-## Discussion
-### Building a development environment using Docker
-
 
 \newpage
 
-## Conclusion
-
-Researchers have to deal with the following aspects of
-their projects to ensure their long-term reproducibility:
-
-- They need to state the correct versions of R (or any other language) used for the analysis;
-- They need to state the correct versions of every other used package for the analysis;
-- They need to make sure that their code is readable and easy to explore; and
-- They need to provide instructions on how to run the whole project.
-
-By using Docker, it is possible to provide the correct versions of \texttt{R} and
-packages (using \texttt{renv}, \texttt{groundhog} or a snapshot of the CRAN repository).
-Another important way to improve reproducibility is also to set up research projects
-as the output of pipelines instead of scripts, but this is outside the scope of this paper.
-But this is not only useful for making projects
-reproducible: by using these tools, researchers also avoid common pitfalls while
-working on their projects. Research projects can last for years and researchers
-typically work on several projects in parallel; by using the tools discussed in
-this article, researchers can thus have project-specific \texttt{R} and package versions,
-thus avoiding the common issue of updating their package library because they
-need the latest feature of a package for one project, but because packages got
-updated, another project now produces different results or simply does not run
-anymore.
-
-However, we realize that the entry cost to a tool like Docker is not low: so at
-the very least, we advise researchers interested in reproducibility to be very
-conservative with updating R itself and to use either \texttt{renv} or \texttt{groundhog} to
-have project-specific libraries. This is because if researchers at least provide
-the R version used and an renv.lock file (if they used \texttt{renv}, or a date, if
-they used \texttt{groundhog}) it is always possible to re-generate an environment with
-the right version of \texttt{R} and packages as we did for this paper. This solution is
-not the gold standard of reproducibility though, but easy enough to be
-implemented at a low cost. This also implies that researchers need to share
-their code and all other necessary information on a platform such as Github, and
-it implies that research has to be performed using free and open source tools as
-proprietary tools cannot easily be installed by other researchers wanting to
-reproduce a study.
-
-A final issue that we want to address is the over-reliance on Docker. While
-we have several alternatives for handling packages, Docker was the only solution
-that we suggested to essentially \`\`freeze\" versions of R and other lower-level
-system dependencies. We want to finish this conclusion by stating that other tools 
-achieve the same purpose, notably Nix [@dolstra2006purely]. Nix
-is not a containerization tool like Docker, but a package manager that allows
-users to install exact versions of software, including scientific software,
-reproducibly. It is possible to essentially use Nix to replace Docker and \texttt{renv}
-(or \texttt{groundhog}), but presenting this tool is outside the scope of this article.
-
-\newpage
-
-## References
-
-::: {#refs}
-:::
-
-\newpage
-\appendix
-\renewcommand{\thefigure}{A\arabic{figure}}
-\renewcommand{\thetable}{A\arabic{table}}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-
-## Appendix
-### Rebuilding the original development environment using Docker {.appendix}
-
+## Discussion {#sec-discussion}
+### Building a development environment using Docker 
 Replicating results from past studies is quite challenging, for many reasons.
 This article focuses on one of these reasons: results cannot be reproduced
 because of changes introduced in more recent versions of the software used for
@@ -330,9 +262,12 @@ scripts.
 
 To reproduce the results from the original study and to pinpoint the impact of
 the change introduced in \texttt{R} 3.6.0, we chose to use Docker. Docker is a
-containerization tool that enables one to build so-called *images*. These
+containerization tool that enables one to build so-called *images*. Containers
+are just what they sound like---a sort of self-contained and isolated (from 
+anything else on your machine) box that we will run our code in. The
 images are usually built on top of a Linux operating system and contain all of
-the required software to build any type of output. After the image containing
+the required software to build any type of output (i.e. these are the codes, 
+dependencies, etc. that go inside the container). After the image containing
 the output has been built, users in turn only need to be able to run Docker
 *containers* instantiated from the image definition to build the output.
 Containerization tools such as Docker solved the \`\`works on my machine\" problem:
@@ -401,7 +336,7 @@ CMD mv /home/research_project/project_output/* /home/research_project/shared_fol
 
 This Dockerfile starts from the same base image, an image that ships R
 version 4.3.0, then it installs the `{dplyr}` package, a popular R package for
-data manipulation and it creates three directories:
+data manipulation and it creates three directories (`mkdir` meaning \`\`make directory"):
 
 - `/home/research_project`
 - `/home/research_project/project_output`
@@ -477,7 +412,76 @@ COPY renv.lock /home/research_project/renv.lock
 RUN R -e "setwd('/home/research_project);renv::init();renv::restore()"
 ```
 
-However, what should researchers who want to replicate a past study do if the
+\newpage
+
+## Conclusion {#sec-conclusion}
+
+Researchers have to deal with the following aspects of
+their projects to ensure their long-term reproducibility:
+
+- They need to state the correct versions of R (or any other language) used for the analysis;
+- They need to state the correct versions of every other used package for the analysis;
+- They need to make sure that their code is readable and easy to explore; and
+- They need to provide instructions on how to run the whole project.
+
+By using Docker, it is possible to provide the correct versions of \texttt{R} and
+packages (using \texttt{renv}, \texttt{groundhog} or a snapshot of the CRAN repository).
+Another important way to improve reproducibility is also to set up research projects
+as the output of pipelines instead of scripts, but this is outside the scope of this paper.
+But this is not only useful for making projects
+reproducible: by using these tools, researchers also avoid common pitfalls while
+working on their projects. Research projects can last for years and researchers
+typically work on several projects in parallel; by using the tools discussed in
+this article, researchers can thus have project-specific \texttt{R} and package versions,
+thus avoiding the common issue of updating their package library because they
+need the latest feature of a package for one project, but because packages got
+updated, another project now produces different results or simply does not run
+anymore.
+
+However, we realize that the entry cost to a tool like Docker is not low: so at
+the very least, we advise researchers interested in reproducibility to be very
+conservative with updating R itself and to use either \texttt{renv} or \texttt{groundhog} to
+have project-specific libraries. This is because if researchers at least provide
+the R version used and an renv.lock file (if they used \texttt{renv}, or a date, if
+they used \texttt{groundhog}) it is always possible to re-generate an environment with
+the right version of \texttt{R} and packages as we did for this paper. This solution is
+not the gold standard of reproducibility though, but easy enough to be
+implemented at a low cost. This also implies that researchers need to share
+their code and all other necessary information on a platform such as Github, and
+it implies that research has to be performed using free and open source tools as
+proprietary tools cannot easily be installed by other researchers wanting to
+reproduce a study.
+
+A final issue that we want to address is the over-reliance on Docker. While
+we have several alternatives for handling packages, Docker was the only solution
+that we suggested to essentially \`\`freeze\" versions of R and other lower-level
+system dependencies. We want to finish this conclusion by stating that other tools 
+achieve the same purpose, notably Nix [@dolstra2006purely]. Nix
+is not a containerization tool like Docker, but a package manager that allows
+users to install exact versions of software, including scientific software,
+reproducibly. It is possible to essentially use Nix to replace Docker and \texttt{renv}
+(or \texttt{groundhog}), but presenting this tool is outside the scope of this article.
+
+\newpage
+
+## References
+
+::: {#refs}
+:::
+
+\newpage
+\appendix
+\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand{\thetable}{A\arabic{table}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+## Appendix
+### Rebuilding the original development environment using Docker {.appendix}
+
+Section @sec-discussion outlined what stepts a researcher starting a new project 
+should take to set up a reproducible environment using Docker and `renv`.
+However, what should researchers who want to replicate a past study do if the 
 original researcher did not provide a Dockerfile nor an `renv.lock` file? This
 is exactly the challenge that we were facing when trying to replicate the
 results of @davenport2022multiracial. We needed to find a way to first install
