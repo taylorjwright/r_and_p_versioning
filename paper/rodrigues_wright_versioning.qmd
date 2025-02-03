@@ -229,7 +229,7 @@ non-uniform on large populations, and should only be used for reproduction of ol
 results\" [@rcoreteam2024]. In essence, the algorithm for  number generation 
 contained a bug that led to bias in the probabilities of numbers being chosen.^[We refer 
 interested readers to the thread reporting the bug and links contained within: [https://bugs.r-project.org/show_bug.cgi?id=17494](https://bugs.r-project.org/show_bug.cgi?id=17494)]. 
-As such, the correct version is the one created using R after version 3.6.0.
+As such, the correct version is the one created using R after version 3.6.0. 
 
 A key takeaway, and focus of this paper, is that despite the authors providing 
 replication materials and indicating which version of \texttt{R} they believed 
@@ -249,50 +249,106 @@ risk that must be managed for reproducibility.
 
 ### Result sensitivity to seed
 
-The table below shows the quantiles of the means obtained from 100 runs with 
-100 different random seeds on R version 3.5 for the `m2m` models. We should
-check where the coefficients from the original paper fall in that distribution,
-and see if coefficients should vary so much simply from changing the seed?
+Given that the results obtained by @davenport2022multiracial changed when the way 
+that numbers are generated in `R` changed in version 3.6.0, we sought to check 
+whether the results are robust to different seeds or if this change was simply 
+bad luck.
+
+Figure \ref{fig-m2m_sim} plots the distribution of the means obtained from running the
+code used to create Figure \ref{dfifig1} 100 times with 100 different random seeds 
+on R version 3.5. Each panel in this figure shows the results for the models comparing 
+multiracial attitudes to those of monoracial minorities along a different measure of attitudes. 
+The solid black line plots the distribution of point estimates, the solid red vertical
+lines are the point estimates from Figure \ref{dfifig1}, while the dashed red 
+vertical lines are the 95% confidence intervals. These results suggest the estimates
+obtained by @davenport2022multiracial are very similar to those that would have been 
+generated using any other seed. The estimate for the social welfare comparison between 
+white-Asians to Asians is perhaps somewhat more negative (and thus less liberal) than 
+was found using the original seed. This makes sense, given that our results in Figure
+\ref{postfig2} shift towards being more liberal for this comparison. To us, this 
+suggests that the authors' original conclusions for these comparisons are reasonably 
+not dramatically impacted by the specific seed used.
+
 ```{r echo = FALSE, message = FALSE}
+#| label: fig-m2m_sim
+#| echo: false
+#| fig-cap: "Solid black line splots distribution of estimates of multiracials’ attitudes, relative to monoracial minority background. 100 repetitions with 100 random seeds. Solid red line represents points estimates and dashed red line reflects 95% confidence intervals from @davenport2022multiracial."
+#| fig-width: 7
+#| fig-height: 5
+
 simulations_m2m_paths <- list.files("../docker/version_3.x_many_seeds/original/shared_folder/", pattern = "m2m.*3_5.*\\d{1,}.rds", full.names = TRUE)
 simulations_m2m <- tibble(paths = simulations_m2m_paths) %>%
   mutate(datasets = map(paths, readRDS),
          paths = str_extract(paths, "\\d{1,}.rds")) %>%
   unnest(cols = c(datasets))
-simulations_m2m %>%
-  group_by(race, model) %>%
-  summarise(
-    q_05_mean = round(quantile(mean, probs = 0.05), 2),
-    q_20_mean = round(quantile(mean, probs = 0.2), 2),
-    q_40_mean = round(quantile(mean, probs = 0.4), 2),
-    q_50_mean = round(quantile(mean, probs = 0.5), 2),
-    q_60_mean = round(quantile(mean, probs = 0.6), 2),
-    q_80_mean = round(quantile(mean, probs = 0.8), 2),
-    q_95_mean = round(quantile(mean, probs = 0.95), 2)
-  ) %>%
-  flextable()
+
+dfi_m2m_3.5 <- readRDS("../docker/version_3.x/original/shared_folder/m2m_R_version_3_5_0__2018_04_23_.rds")
+
+dfi_m2m_3.5 <- dfi_m2m_3.5 |>
+  mutate(original = 1) 
+
+combined_m2m <- rbind(dfi_m2m_3.5, simulations_m2m |> 
+        dplyr::select(-paths) |>
+        mutate(original = 0))
+
+ggplot(data = combined_m2m |> filter(original == 0), aes(x = mean)) +
+  geom_density() +
+  geom_vline(data = combined_m2m |> filter(original == 1), aes(xintercept = mean, color = "red"), 
+             show.legend = FALSE) +
+    geom_vline(data = combined_m2m |> filter(original == 1), aes(xintercept = upper95, color = "red"), 
+             show.legend = FALSE, linetype = 2) +
+    geom_vline(data = combined_m2m |> filter(original == 1), aes(xintercept = lower95, color = "red"), 
+             show.legend = FALSE, linetype = 2) +
+  labs(x = "Mean Difference from Monoracial Minority Group") +
+  facet_wrap(vars(model, race)) +
+  theme_minimal()
 ```
-The table below shows the quantiles of the means obtained from 100 runs with 
-100 different random seeds on R version 3.5 for the `m2w` models:
+Figure \ref{fig-m2w_sim} similarly plots the distribution of estimates obtained 
+from 100 runs with 100 different random seeds on R version 3.5 for the models 
+comparing multiracial attitudes to those of monoracial whites. As above, the solid 
+black line plots the distribution of point estimates, the solid red vertical lines 
+are the point estimates from Figure \ref{dfifig1} while the dashed red vertical 
+lines are the 95% confidence intervals. Each panel corresponds to a different 
+comparison between racial groups and a different measure of attitudes. Similarly
+to Figure \ref{fig-m2m_sim}, the original estimates for White-Asian social welfare 
+attitudes are less liberal than those suggested by other seeds, however the other 
+estimates are in line with those from our many seeds exercise.
+
 ```{r echo = FALSE, message = FALSE}
+#| label: fig-m2w_sim
+#| echo: false
+#| fig-cap: "Solid black line splots distribution of estimates of multiracials’ attitudes, relative to monoracial white background. 100 repetitions with 100 random seeds. Solid red line represents points estimates and dashed red line reflects 95% confidence intervals from @davenport2022multiracial."
+#| fig-width: 7
+#| fig-height: 5
+
 simulations_m2w_paths <- list.files("../docker/version_3.x_many_seeds/original/shared_folder/", pattern = "m2w.*3_5.*\\d{1,}.rds", full.names = TRUE)
 simulations_m2w <- tibble(paths = simulations_m2w_paths) %>%
   mutate(datasets = map(paths, readRDS),
          paths = str_extract(paths, "\\d{1,}.rds")) %>%
   unnest(cols = c(datasets))
-simulations_m2w %>%
-  group_by(race, model) %>%
-  summarise(
-    q_05_mean = round(quantile(mean, probs = 0.05), 2),
-    q_20_mean = round(quantile(mean, probs = 0.2), 2),
-    q_40_mean = round(quantile(mean, probs = 0.4), 2),
-    q_50_mean = round(quantile(mean, probs = 0.5), 2),
-    q_60_mean = round(quantile(mean, probs = 0.6), 2),
-    q_80_mean = round(quantile(mean, probs = 0.8), 2),
-    q_95_mean = round(quantile(mean, probs = 0.95), 2)
-  ) %>%
-  flextable()
+
+dfi_m2w_3.5 <- readRDS("../docker/version_3.x/original/shared_folder/m2w_R_version_3_5_0__2018_04_23_.rds")
+
+ggplot(data = simulations_m2w, aes(x = mean)) +
+  geom_density() +
+  geom_vline(data = dfi_m2w_3.5, aes(xintercept = mean, color = "red"), 
+             show.legend = FALSE) +
+    geom_vline(data = dfi_m2w_3.5, aes(xintercept = upper95, color = "red"), 
+             show.legend = FALSE, linetype = 2) +
+    geom_vline(data = dfi_m2w_3.5, aes(xintercept = lower95, color = "red"), 
+             show.legend = FALSE, linetype = 2) +
+  labs(x = "Mean Difference from Monoracial White Group") +
+  facet_wrap(vars(model, race)) +
+  theme_minimal()
 ```
+In summary, the results obtained by @davenport2022multiracial are not able to be 
+recreated despite providing code and a version number for `R`. This is due to a 
+bug fix in `R` that changed default behavior when generating numbers. As the authors
+use code that generates numbers in this way, they could be affected by the possible 
+bias arising from the bug which was present in the version of `R` they used. In order 
+to examine this, we ran their code 100 times using 100 random seeds and plotted the 
+results against the original estimates. We conclude that the original results appear
+reasonable and are not driven by the bug that was fixed in `R`.
 
 \newpage
 
