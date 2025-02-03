@@ -235,7 +235,9 @@ A key takeaway, and focus of this paper, is that despite the authors providing
 replication materials and indicating which version of \texttt{R} they believed 
 they used, the results cannot be reproduced. This aspect is not a criticism of the 
 authors, who were unknowingly using software that contained an error, but rather a 
-demonstration of the challenges of reproducibility in the face of software updates. 
+demonstration of the challenges of reproducibility in the face of software updates.^[It 
+is important to note that these kinds of breaking changes R are relatively 
+infrequent and breaking changes are more likely to come from updated packages.] 
 There are ways to ensure that the estimates are consistent (such as ensuring to always 
 explicitly articulate options in functions so that changes to defaults cannot break
 existing code. However, reproducibility is still threatened by software updates 
