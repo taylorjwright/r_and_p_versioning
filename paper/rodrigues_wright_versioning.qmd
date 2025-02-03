@@ -108,7 +108,7 @@ challenges arising from changes in the statistical software \texttt{R}. We were
 unable to reproduce the authors' results using either the current version of
 \texttt{R}, or the version that the authors indicate they used. The lack of
 reproducibility arose due to a change in the defaults used by base \texttt{R}
-when generating random numbers starting in version 3.6.0.
+when generating  numbers starting in version 3.6.0.
 
 We contribute to the existing literature in three ways. 
 First, we add to the discussion about the importance of the availability of 
@@ -223,10 +223,10 @@ Following changes to base \texttt{R}  in 3.6.x the sample() function, and thus n
 behaviour is `RNGkind(sample.kind = "Rejection")`.^[See this announcement about \texttt{R} 3.6.0 for more details: 
 [https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html](https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html)] 
 Why was this change made? According to the `RNGkind` documentation, 
-\`\`sample.kind can be \`\`Rounding\" or \`\`Rejection\", or partial matches to these. 
+\`\`sample.kind\" can be \`\`Rounding\" or \`\`Rejection\", or partial matches to these. 
 The former was the default in versions prior to 3.6.0: it made sample noticeably
 non-uniform on large populations, and should only be used for reproduction of old 
-results\" [@rcoreteam2024]. In essence, the algorithm for random number generation 
+results\" [@rcoreteam2024]. In essence, the algorithm for  number generation 
 contained a bug that led to bias in the probabilities of numbers being chosen.^[We refer 
 interested readers to the thread reporting the bug and links contained within: [https://bugs.r-project.org/show_bug.cgi?id=17494](https://bugs.r-project.org/show_bug.cgi?id=17494)]. 
 As such, the correct version is the one created using R after version 3.6.0.
@@ -244,7 +244,7 @@ software versions (including packages or commands) in the code or README files
 is a good start, but as our example shows, it is not enough to ensure faithful
 reproduction. It should also be noted that the package that provides the 
 \texttt{Zelig()} function, \texttt{Zelig} is not available anymore. It is still
-possible to install it from the CRAN archive’s, but this constitutes an additional
+possible to install it from the CRAN archives, but this constitutes an additional
 risk that must be managed for reproducibility.
 
 ### Result sensitivity to seed
