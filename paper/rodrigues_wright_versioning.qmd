@@ -65,8 +65,8 @@ a tandem movement discussing the importance of and need for research
 debate, replication is, broadly speaking, re-testing a hypothesis while changing
 an element of previous research (e.g. the sample or estimating equation) whereas
 reproducibility (sometimes referred to as verification or computational
-reproducibility) is following a study's protocol or methods exactly and
-obtaining the results presented in the study.^[For further discussion on
+reproducibility) is following a study's protocol or methods exactly and, using the 
+original data, obtaining the results presented in the study.^[For further discussion on
 definitions, scopes, and types of replication and reproducibility see, for
 example, @clemens2017meaning, @derksen2022kinds, @hamermesh2007replication, and
 @nosek2020replication.]
