@@ -1,5 +1,5 @@
 let
- pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/976fa3369d722e76f37c77493d99829540d43845.tar.gz") {};
+ pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/2025-01-27.tar.gz") {};
  rpkgs = builtins.attrValues {
   inherit (pkgs.rPackages) knitr dplyr tidyr stringr purrr ggplot2 flextable quarto targets tarchetypes;
 };
