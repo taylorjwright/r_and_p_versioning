@@ -1,7 +1,10 @@
 .quarto/_freeze/paper/rodrigues_wright_versioning/execute-results/tex.json
+.quarto/_freeze/paper/rodrigues_wright_versioning/figure-pdf/fig-m2m_sim-1.pdf
+.quarto/_freeze/paper/rodrigues_wright_versioning/figure-pdf/fig-m2w_sim-1.pdf
 .quarto/xref/7034ff1f
 .quarto/xref/INDEX
 .targets-files
+.targets-runs/
 _targets/.gitignore
 _targets/meta/meta
 _targets/meta/process
