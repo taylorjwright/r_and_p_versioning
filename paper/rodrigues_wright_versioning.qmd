@@ -249,6 +249,50 @@ risk that must be managed for reproducibility.
 
 ### Result sensitivity to seed
 
+The table below shows the quantiles of the means obtained from 100 runs with 
+100 different random seeds on R version 3.5 for the `m2m` models. We should
+check where the coefficients from the original paper fall in that distribution,
+and see if coefficients should vary so much simply from changing the seed?
+```{r echo = FALSE, message = FALSE}
+simulations_m2m_paths <- list.files("../docker/version_3.x_many_seeds/original/shared_folder/", pattern = "m2m.*3_5.*\\d{1,}.rds", full.names = TRUE)
+simulations_m2m <- tibble(paths = simulations_m2m_paths) %>%
+  mutate(datasets = map(paths, readRDS),
+         paths = str_extract(paths, "\\d{1,}.rds")) %>%
+  unnest(cols = c(datasets))
+simulations_m2m %>%
+  group_by(race, model) %>%
+  summarise(
+    q_05_mean = round(quantile(mean, probs = 0.05), 2),
+    q_20_mean = round(quantile(mean, probs = 0.2), 2),
+    q_40_mean = round(quantile(mean, probs = 0.4), 2),
+    q_50_mean = round(quantile(mean, probs = 0.5), 2),
+    q_60_mean = round(quantile(mean, probs = 0.6), 2),
+    q_80_mean = round(quantile(mean, probs = 0.8), 2),
+    q_95_mean = round(quantile(mean, probs = 0.95), 2)
+  ) %>%
+  flextable()
+```
+The table below shows the quantiles of the means obtained from 100 runs with 
+100 different random seeds on R version 3.5 for the `m2w` models:
+```{r echo = FALSE, message = FALSE}
+simulations_m2w_paths <- list.files("../docker/version_3.x_many_seeds/original/shared_folder/", pattern = "m2w.*3_5.*\\d{1,}.rds", full.names = TRUE)
+simulations_m2w <- tibble(paths = simulations_m2w_paths) %>%
+  mutate(datasets = map(paths, readRDS),
+         paths = str_extract(paths, "\\d{1,}.rds")) %>%
+  unnest(cols = c(datasets))
+simulations_m2w %>%
+  group_by(race, model) %>%
+  summarise(
+    q_05_mean = round(quantile(mean, probs = 0.05), 2),
+    q_20_mean = round(quantile(mean, probs = 0.2), 2),
+    q_40_mean = round(quantile(mean, probs = 0.4), 2),
+    q_50_mean = round(quantile(mean, probs = 0.5), 2),
+    q_60_mean = round(quantile(mean, probs = 0.6), 2),
+    q_80_mean = round(quantile(mean, probs = 0.8), 2),
+    q_95_mean = round(quantile(mean, probs = 0.95), 2)
+  ) %>%
+  flextable()
+```
 
 \newpage
 
