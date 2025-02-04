@@ -569,7 +569,7 @@ reproduce a study.
 Furthermore, one must be aware that while Docker offers many benefits, it is not a 
 panacea. Users of Docker must pay attention to several issues. First of all,
 while the operating system one uses Docker on does not matter, neither for
-buliding images nor for running containers, the CPU architecture does matter.
+building images nor for running containers, the CPU architecture does matter.
 This means that an image built on (and thus compatible with) the 64-bit CPU architecture 
 that is used in Intel and AMD processors (henceforth amd64) cannot be used
 on the arm64 architecture. Arm64 CPUs are the ones driving mobile phones
@@ -585,7 +585,7 @@ the image. However, it is still not guaranteed that the image will successfully
 rebuild, as the software included must then also be compatible with arm64.
 Secondly, in the ideal scenario, images would be stored and made available to reproducers
 to avoid imposing on reproducers the build process. By using best practices images
-should be be rebuildable, however, one must keep in mind that the base operating
+should be rebuildable, however, one must keep in mind that the base operating
 system that is used to start off an image for a project also has a finite lifespan.
 Most base images use the Ubuntu operating system in its *long term support* (LTS) variant. These
 LTS versions receive support for 5 years: this means that trying to rebuild an image
