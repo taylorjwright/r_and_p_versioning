@@ -559,6 +559,9 @@ it implies that research has to be performed using free and open source tools as
 proprietary tools cannot easily be installed by other researchers wanting to
 reproduce a study.
 
+### In the paragraph below is a good place to put the expanded discussion about Docker. 
+
+
 A final issue that we want to address is the over-reliance on Docker. While
 we have several alternatives for handling packages, Docker was the only solution
 that we suggested to essentially \`\`freeze\" versions of R and other lower-level
