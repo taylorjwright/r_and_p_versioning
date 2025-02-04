@@ -551,8 +551,10 @@ updated, another project now produces different results or simply does not run
 anymore.
 
 However, we realize that the entry cost to a tool like Docker is not low: so at
-the very least, we advise researchers interested in reproducibility to be very
-conservative with updating R itself and to use either \texttt{renv} or \texttt{groundhog} to
+the very least, we advise researchers interested in reproducibility to update R and
+R packages at the start of a new project, and then to be very
+conservative with updating \texttt{R} itself while working on a project
+and to use either \texttt{renv} or \texttt{groundhog} to
 have project-specific libraries. This is because if researchers at least provide
 the R version used and an renv.lock file (if they used \texttt{renv}, or a date, if
 they used \texttt{groundhog}) it is always possible to re-generate an environment with
@@ -564,26 +566,43 @@ it implies that research has to be performed using free and open source tools as
 proprietary tools cannot easily be installed by other researchers wanting to
 reproduce a study.
 
-However, one must be aware that while Docker offers many benefits, it is not a 
+Furthermore, one must be aware that while Docker offers many benefits, it is not a 
 panacea. Users of Docker must pay attention to several issues. First of all,
 while the operating system one uses Docker on does not matter, neither for
 buliding images nor for running containers, the CPU architecture does matter.
-This means that an image built on (and thus for) the 64-bit CPU architecture 
+This means that an image built on (and thus compatible with) the 64-bit CPU architecture 
 that is used in Intel and AMD processors (henceforth amd64) cannot be used
 on the arm64 architecture. Arm64 CPUs are the ones driving mobile phones
 and modern Apple computers (under the commercial name "Apple Silicon"), in other
 words, this means that if a researcher built an image that is not compatible
 with arm64 CPUs, reproducers on modern Apple computers might have issues
-running containers from this image. However, more and more base images that can
+running containers from this image. Arm64 is becoming also more popular for 
+devices made by other manufacturers, and we believe that it will become more 
+common in the near future. That being said, more and more base images that can
 be used to start off a researchers own analysis both ship an amd64 and arm64
 version, which means that at the very least, reproducers will be able to rebuild 
 the image. However, it is still not guaranteed that the image will successfully
 rebuild, as the software included must then also be compatible with arm64.
+Secondly, in the ideal scenario, images would be stored and made available to reproducers
+to avoid imposing on reproducers the build process. By using best practices images
+should be be rebuildable, however, one must keep in mind that the base operating
+system that is used to start off an image for a project also has a finite lifespan.
+Most base images use the Ubuntu operating system in its *long term support* (LTS) variant. These
+LTS versions receive support for 5 years: this means that trying to rebuild an image
+after the support runs out will not be possible, and it will become mandatory to upgrade the base
+image and rerun the build process. This is actually a difficulty that we encountered when trying
+to reproduce the results of this study, which is why we had to use an image that made
+it easy to install old versions of R on new versions of operating systems (as described
+in the appendix). Thankfully, there are several ways to store images, either for free on
+a so-called image registry such as Docker Hub^[\url{https://hub.docker.com/}] or to GitHub Packages,
+a registry offered by GitHub. It is also possible to store the images on a standard FTP or 
+web server on an institutional website and offer them as a download.
 
-A final issue that we want to address is the over-reliance on Docker. While
+To conclude, over-reliance on Docker can be an issue. While
 we have several alternatives for handling packages, Docker was the only solution
 that we suggested to essentially \`\`freeze\" versions of R and other lower-level
-system dependencies. We want to finish this conclusion by stating that other tools 
+system dependencies, and users must be aware of its shortcomings. 
+We want to finish this conclusion by stating that other tools 
 achieve the same purpose, notably Nix [@dolstra2006purely]. Nix
 is not a containerization tool like Docker, but a package manager that allows
 users to install exact versions of software, including scientific software,
@@ -605,12 +624,12 @@ reproducibly. It is possible to essentially use Nix to replace Docker and \textt
 \setcounter{table}{0}
 
 ## Appendix
-### Rebuilding the original development environment using Docker {.appendix}
+### Rebuilding the oinal development environment using Docker {.appendix}
 
 Section @sec-discussion outlined what steps a researcher starting a new project 
 should take to set up a reproducible environment using Docker and `renv`.
 However, what should researchers who want to replicate a past study do if the 
-original researcher did not provide a Dockerfile nor an `renv.lock` file? This
+oinal researcher did not provide a Dockerfile nor an `renv.lock` file? This
 is exactly the challenge that we were facing when trying to replicate the
 results of @davenport2022multiracial. We needed to find a way to first install
 the right version of \texttt{R}, then the right version of the packages that they used,
