@@ -250,7 +250,7 @@ possible to install it from the CRAN archives, but this constitutes an additiona
 risk that must be managed for reproducibility.
 
 In general, risks for reproducibility include: package or software updates that 
-render code backward incompatible (for example, an update that changes the order
+render code backwards incompatible (for example, an update that changes the order
 of arguments supplied to a function); the use of packages or software that are not 
 or no longer are being actively developed; similarly, use of packages or software 
 with only a single maintainer (especially if the language used is dated or obscure); 
