@@ -510,6 +510,11 @@ easily install all the required packages in the future by simply running:
 renv::restore()
 ```
 
+This will download the right packages at image build time. It would also be possible
+to copy the images from the host computer into the image, however, this would turn
+the build process non-reproducible, as the image would only successfully build
+on that particular host computer.
+
 A researcher can thus add the following steps in the Dockerfile to download the
 right packages when building the image:
 
@@ -559,8 +564,21 @@ it implies that research has to be performed using free and open source tools as
 proprietary tools cannot easily be installed by other researchers wanting to
 reproduce a study.
 
-### In the paragraph below is a good place to put the expanded discussion about Docker. 
-
+However, one must be aware that while Docker offers many benefits, it is not a 
+panacea. Users of Docker must pay attention to several issues. First of all,
+while the operating system one uses Docker on does not matter, neither for
+buliding images nor for running containers, the CPU architecture does matter.
+This means that an image built on (and thus for) the 64-bit CPU architecture 
+that is used in Intel and AMD processors (henceforth amd64) cannot be used
+on the arm64 architecture. Arm64 CPUs are the ones driving mobile phones
+and modern Apple computers (under the commercial name "Apple Silicon"), in other
+words, this means that if a researcher built an image that is not compatible
+with arm64 CPUs, reproducers on modern Apple computers might have issues
+running containers from this image. However, more and more base images that can
+be used to start off a researchers own analysis both ship an amd64 and arm64
+version, which means that at the very least, reproducers will be able to rebuild 
+the image. However, it is still not guaranteed that the image will successfully
+rebuild, as the software included must then also be compatible with arm64.
 
 A final issue that we want to address is the over-reliance on Docker. While
 we have several alternatives for handling packages, Docker was the only solution
