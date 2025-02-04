@@ -363,21 +363,26 @@ analysis, despite the availability of both data and the author' original
 scripts.
 
 To reproduce the results from the original study and to pinpoint the impact of
-the change introduced in \texttt{R} 3.6.0, we chose to use Docker. Docker is a
-containerization tool that enables one to build so-called *images*. Containers
-are just what they sound like---a sort of self-contained and isolated (from 
-anything else on your machine) box that we will run our code in. The
+the change introduced in \texttt{R} 3.6.0, we chose to use Docker. To install Docker
+
+Docker is a containerization tool that enables one to build so-called *images*. The
 images are usually built on top of a Linux operating system and contain all of
-the required software to build any type of output (i.e. these are the codes, 
-dependencies, etc. that go inside the container). After the image containing
-the output has been built, users in turn only need to be able to run Docker
-*containers* instantiated from the image definition to build the output.
-Containerization tools such as Docker solved the \`\`works on my machine\" problem:
-this problem arises when software that works well on the development machine of
-the developer fails to run successfully on a customer's machine. This usually
-happens because the customer's computer does not have the necessary dependencies
-to run the software (which are traditionally not shipped alongside the software
-product) or because of a version mismatch of the operating system.
+the required software to build any type of output. The images are made up of the 
+software, dependencies, code, etc., that will be used to generate the analysis. Think of 
+the image like a big sandbox that gets frozen in time and doesn't change but has
+all of the shovels and buckets that we need ready to go. After the image containing 
+the output has been built, users in turn only need to be able to run Docker 
+*containers* instantiated from the image definition to build the output. 
+Containers are basically one instance of an image, every time we step foot into
+that sandbox do create something, we start from the same position where it was 
+frozen in time. If we want to change that start position, we need to rebuild the 
+sandbox slightly differently. Containerization tools such as Docker solved the 
+\`\`works on my machine\" problem: this problem arises when software that works 
+well on the development machine of the developer fails to run successfully on a 
+customer's machine. This usually happens because the customer's computer does not 
+have the necessary dependencies to run the software (which are traditionally not 
+shipped alongside the software product) or because of a version mismatch of the 
+operating system.
 
 The same approach can be used to build research projects, which also suffer
 from the same \`\`works on my machine\" problem as any other type of software.
@@ -581,7 +586,7 @@ reproducibly. It is possible to essentially use Nix to replace Docker and \textt
 ## Appendix
 ### Rebuilding the original development environment using Docker {.appendix}
 
-Section @sec-discussion outlined what stepts a researcher starting a new project 
+Section @sec-discussion outlined what steps a researcher starting a new project 
 should take to set up a reproducible environment using Docker and `renv`.
 However, what should researchers who want to replicate a past study do if the 
 original researcher did not provide a Dockerfile nor an `renv.lock` file? This
