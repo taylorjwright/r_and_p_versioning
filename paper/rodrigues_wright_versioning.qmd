@@ -618,8 +618,8 @@ with arm64 CPUs, reproducers on modern Apple computers might have issues
 running containers from this image. Arm64 is becoming also more popular for 
 devices made by other manufacturers, and we believe that it will become more 
 common in the near future. That being said, more and more base images that can
-be used to start off a researchers own analysis both ship an amd64 and arm64
-version, which means that at the very least, reproducers will be able to rebuild 
+be used to start off a researcher’s own analysis both ship an amd64 and arm64
+versions, which means that at the very least, reproducers will be able to rebuild 
 the image. However, it is still not guaranteed that the image will successfully
 rebuild, as the software included must then also be compatible with arm64.
 Secondly, in the ideal scenario, images would be stored and made available to reproducers
