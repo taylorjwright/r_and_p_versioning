@@ -363,7 +363,7 @@ analysis, despite the availability of both data and the author' original
 scripts.
 
 To reproduce the results from the original study and to pinpoint the impact of
-the change introduced in \texttt{R} 3.6.0, we chose to use Docker. To install Docker
+the change introduced in \texttt{R} 3.6.0, we chose to use Docker. 
 
 Docker is a containerization tool that enables one to build so-called *images*. The
 images are usually built on top of a Linux operating system and contain all of
