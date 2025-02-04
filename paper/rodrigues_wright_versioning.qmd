@@ -249,6 +249,16 @@ reproduction. It should also be noted that the package that provides the
 possible to install it from the CRAN archives, but this constitutes an additional
 risk that must be managed for reproducibility.
 
+In general, risks for reproducibility include: package or software updates that 
+render code backward incompatible (for example, an update that changes the order
+of arguments supplied to a function); the use of packages or software that are not 
+or no longer are being actively developed; similarly, use of packages or software 
+with only a single maintainer (especially if the language used is dated or obscure); 
+and the use of packages or software with many dependencies, as only one of these 
+dependencies needs to fail in order to render code non-functioning. Each of these
+represent possible failure points for code and we encourage researchers to consider 
+these when deciding which software or packages to use in their projects.
+
 ### Result sensitivity to seed
 
 Given that the results obtained by @davenport2022multiracial changed when the way 
