@@ -219,8 +219,8 @@ The issue seems to be that the weights the authors use are non-integer and the
 main function used in their analysis, \texttt{Zelig()}, uses \texttt{sample()} in cases with 
 non-integer values (see
 [http://docs.zeligproject.org/articles/weights.html](http://docs.zeligproject.org/articles/weights.html)).
-Following changes to base \texttt{R}  in 3.6.x the sample() function, and thus now \texttt{Zelig()}, yields different results in \texttt{R} versions later than 3.5.x. Before \texttt{R} 3.6.0 `RNGkind(sample.kind = "Rounding")` was the default behaviour but after 3.6.0 the sample function's new default 
-behaviour is `RNGkind(sample.kind = "Rejection")`.^[See this announcement about \texttt{R} 3.6.0 for more details: 
+Following changes to base \texttt{R}  in 3.6.x the sample() function, and thus now \texttt{Zelig()}, yields different results in \texttt{R} versions later than 3.5.x. Before \texttt{R} 3.6.0 `RNGkind(sample.kind = "Rounding")` was the default behavior but after 3.6.0 the sample function's new default 
+behavior is `RNGkind(sample.kind = "Rejection")`.^[See this announcement about \texttt{R} 3.6.0 for more details: 
 [https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html](https://blog.revolutionanalytics.com/2019/05/whats-new-in-r-360.html)] 
 Why was this change made? According to the `RNGkind` documentation, 
 \`\`sample.kind\" can be \`\`Rounding\" or \`\`Rejection\", or partial matches to these. 
@@ -456,16 +456,24 @@ moves the outputs generated from running the `analyse_data.R` script to a folder
 called `shared_folder`. It is important to say that `RUN` statements will be
 executed as the image gets built, and `CMD` statements will be executed as a
 container runs. Using this Dockerfile, an image called `research_project` can be
-built with the following command:
+built with the following command entered into a terminal/command line:
 
 ```
 docker build -t research_project .
 ```
 
+The \`\`-t" is an option that tags this image with the name `research_project` 
+so that we can refer to it later. This name could be whatever you would like. 
+The \`\`." means \`\` this current directory/folder", so the command will build
+the image from the Dockerfile contained in the current folder. Again, during the
+building of an image, everything up to the `CMD` line in the Dockerfile will be 
+run.
+
 This image can then be archived and shared for replication purposes. Other
 images can be built on top of this one, and will thus contain R version 4.3.0,
 the `{dplyr}` package, the data and the project’s folder structure. Future
-researchers can also run a container from that image using a command such as:
+researchers can also run a container from that image using a terminal/command line 
+command such as:
 
 ```
 docker run -d -it --rm --name research_project_container \
@@ -473,11 +481,26 @@ docker run -d -it --rm --name research_project_container \
   research_project
 ```
 
-The container, called `research_project_container` will execute the `CMD`
-statement from the Dockerfile, in other words, move the outputs to the
-`shared_folder`. This folder is like a tunnel between the machine that runs the
-container and the container itself: by doing this, the outputs generated within
-the container can now be accessed from the host's computer.
+This is a long command and we have broken it into multiple lines using \`\` \ " as 
+a line break. The \`\` docker run" is the command that starts the new container 
+based on the image previously generated. We tell \`\` docker run" which image we 
+want to use by specifying the tag at the end, here \`\`research_project", which is 
+what we tagged the image as previously. Using the \`\`-d" option starts the container 
+running in the background and  \`\`--rm" will remove the container when it is finished 
+running. The \`\`-v" option lets us specify the path to the shared folder on our 
+computer where we want to output to be placed.
+
+The container, called `research_project_container`, using the \`\`--name" option, 
+will execute the `CMD` statement from the Dockerfile. In other words, it will 
+move the outputs to the `shared_folder`. This folder is like a tunnel between 
+the machine that runs the container and the container itself: by doing this, the 
+outputs generated within the container can now be accessed from the host's computer.
+The \`\`/host/machine/shared_folder" is the path to the shared folder on the host's 
+computer while \`\`/home/research_project/shared_folder" is the path to shared folder
+inside of the Docker container. The \`\`:rw" needs to be present to allow the Docker 
+container to read and write in the shared folder. After this command runs, the host 
+should be able to navigate to the path to the shared folder and access all of the output 
+produced.
 
 The image built by the process above is immutable: so as long as users can run
 it, the outputs produced will be the same as when the original author
@@ -523,6 +546,12 @@ COPY renv.lock /home/research_project/renv.lock
 
 RUN R -e "setwd('/home/research_project);renv::init();renv::restore()"
 ```
+
+If we have modified the Dockerfile we previously introduced to add these lines, 
+a researcher can build the image again with the `docker build` command  that we 
+introduced above and then run the container with the `docker run` command previously 
+specified. Every time we change the Dockerfile to add more commands before the `CMD` 
+command used to run the docker container, we need to rebuild the docker image.   
 
 \newpage
 
@@ -629,7 +658,7 @@ reproducibly. It is possible to essentially use Nix to replace Docker and \textt
 Section @sec-discussion outlined what steps a researcher starting a new project 
 should take to set up a reproducible environment using Docker and `renv`.
 However, what should researchers who want to replicate a past study do if the 
-oinal researcher did not provide a Dockerfile nor an `renv.lock` file? This
+original researcher did not provide a Dockerfile nor an `renv.lock` file? This
 is exactly the challenge that we were facing when trying to replicate the
 results of @davenport2022multiracial. We needed to find a way to first install
 the right version of \texttt{R}, then the right version of the packages that they used,
