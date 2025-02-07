@@ -150,7 +150,7 @@ respondents, looking for differences in political ideology, party affiliation,
 positions about cultural issues, social welfare, and police treatment across 
 racial groups.
 
-::: {layout="[[1], [1], [1]]"}
+::: {#fig-m2w layout="[[1], [1], [1]]"}
 ![Figure 1 from @davenport2022multiracial. Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{dfifig1}](./figures/figure1_screenshot.png)
 
 ![Figure 1 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig1}](./figures/figure1_postchange.png)
@@ -186,7 +186,7 @@ Figure \ref{prefig1} provides Figure 1 @davenport2022multiracial when using an
 earlier software version (specifically a version of \texttt{R} pre 3.6.0). 
 These are otherwise the same as those presented in the published article.
 
-::: {layout="[[1], [1], [1]]"}
+::: {#fig-m2w layout="[[1], [1], [1]]"}
 ![Figure 2 from @davenport2022multiracial. Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{dfifig2}](./figures/figure2_screenshot.png)
 
 ![Figure 2 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig2}](./figures/figure2_postchange.png)
