@@ -156,6 +156,8 @@ racial groups.
 ![Figure 1 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig1}](./figures/figure1_postchange.png)
 
 ![Figure 1 from @davenport2022multiracial when using an earlier software version (R pre 3.6.0). Multiracial attitudes relative to monoracial minorities. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{prefig1}](./figures/figure1_prechange.png)
+
+Recreating Figure 1 from @davenport2022multiracial
 :::
 
 
@@ -191,7 +193,9 @@ These are otherwise the same as those presented in the published article.
 
 ![Figure 2 from @davenport2022multiracial when using a later software version (R post 3.6.0). Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{postfig2}](./figures/figure2_postchange.png)
 
-![Figure 2 from @davenport2022multiracial when using an earlier software version (R pre 3.6.0). Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{prefig2}](./figures/figure2_prechange.png)
+![Figure 2 from @davenport2022multiracial when using an earlier software version (R pre 3.6.0). Multiracial attitudes relative to monoracial Whites. A, White-Asian; B, White-Black. Higher values are more liberal attitudes. \label{prefig2}](./figures/figure2_prechange.png) 
+
+Recreating Figure 2 from @davenport2022multiracial
 :::
 
 Figure \ref{dfifig2} presents Figure 2 from @davenport2022multiracial. Again, 
