@@ -30,7 +30,7 @@ and norms among researchers. However, even when these norms and requirements are
 followed, changes to the software used in data cleaning and analysis can render 
 papers non-reproducible. This paper details the challenges of reproducibility in 
 the face of software updates. We present a case study of a published article whose 
-results are no longer reproducible due to changes in the software used. We then 
+originally submitted results cannot be reproduced using the originally submitted replication materials due to changes in the software used and a mistake in which version of the software was used. In this case, the findings are substantively unchanged and are robust to additional tests related to the software change. We then 
 discuss the tools and techniques researchers can use to ensure that their research 
 remains reproducible despite changes in the software used.
 \end{abstract}
@@ -105,10 +105,10 @@ In this paper, we present a case study of an article published in Journal of
 Politics in January 2022 titled, \`\`Multiracial Identity and Political
 Preferences\", [@davenport2022multiracial], that details replication
 challenges arising from changes in the statistical software \texttt{R}. We were
-unable to reproduce the authors' results using either the current version of
-\texttt{R}, or the version that the authors indicate they used. The lack of
+unable to reproduce the authors' originally submitted results using either the current version of
+\texttt{R}, or the version that the authors indicated they used in the originally submitted replication files. The lack of
 reproducibility arose due to a change in the defaults used by base \texttt{R}
-when generating  numbers starting in version 3.6.0.
+when generating  numbers starting in version 3.6.0 combined with what is likely a mistake in recording which version of the software the authors used. We do note however, that even when using the later software version (R post 3.6.0), the substantive conclusions of the article do not change and as we describe later, the results are robust to different random seed choices.
 
 We contribute to the existing literature in three ways. 
 First, we add to the discussion about the importance of the availability of 
@@ -124,7 +124,7 @@ existence cannot guarantee reproducibility. This brings us to our second
 contribution: we expand on the discussion of problems raised by software and 
 package versioning for reproducibility by providing a walkthrough of the problem
 using a concrete example. Lastly, we further the discussion of tools and best 
-practices for ensuring reproducibility. Specifically, we provide a step-by-step 
+practices for ensuring reproducibility which directly guards against accidents such as incorrectly transcribing the software version. Specifically, we provide a step-by-step 
 guide to using Docker and the \texttt{renv} \texttt{R} package to ensure the reproducibility of 
 research.
 
@@ -357,8 +357,8 @@ ggplot(data = simulations_m2w, aes(x = mean)) +
   facet_wrap(vars(model, race)) +
   theme_minimal()
 ```
-In summary, the results obtained by @davenport2022multiracial are not able to be 
-recreated despite providing code and a version number for `R`. This is due to a 
+In summary, the originally submitted results obtained by @davenport2022multiracial are not able to be 
+recreated using the originally submitted replication files despite providing code and a version number for `R`. This is due to a 
 bug fix in `R` that changed default behavior when generating numbers. As the authors
 use code that generates numbers in this way, they could be affected by the possible 
 bias arising from the bug which was present in the version of `R` they used. In order 
